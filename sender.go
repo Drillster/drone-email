@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"net/smtp"
+	"strconv"
 	"strings"
 
 	"github.com/drone/drone-go/drone"
@@ -80,7 +81,7 @@ func send(subject, body string, c *Context) error {
 	}
 
 	var auth smtp.Auth
-	var addr = net.JoinHostPort(c.Email.Host, c.Email.Port)
+	var addr = net.JoinHostPort(c.Email.Host, strconv.Itoa(c.Email.Port))
 
 	// setup the authentication to the smtp server
 	// if the username and password are provided.
