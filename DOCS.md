@@ -1,20 +1,22 @@
-Use the Email plugin to send an email to a recipient list when a build completes. The following parameters are used to configure the email plugin:
+Use this plugin for sending build status notifications via Email. You can
+override the default configuration with the following parameters:
 
-* `from` - sends email from this address
-* `host` - smtp server host
-* `port` - smtp server port (defaults to `587`)
-* `username` - smtp server username
-* `password` - smtp server password
-* `recipient` - list of email recipients (defaults to commit email)
+* `from` - Send notifications from this address
+* `host` - SMTP server host
+* `port` - SMTP server port, defaults to `587`
+* `username` - SMTP username
+* `password` - SMTP password
+* `recipients` - List of recipients, defaults to commit email
 
-Same email configuration:
+## Example
+
+The following is a sample configuration in your .drone.yml file:
 
 ```yaml
 notify:
   email:
     from: noreply@github.com
     host: smtp.mailgun.org
-    port: 587
     username: octocat
     password: 12345
     recipients:

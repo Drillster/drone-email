@@ -1,9 +1,15 @@
-# Docker image for Drone's email notification plugin
+# Docker image for the Drone Email plugin
 #
-#     CGO_ENABLED=0 go build -a -tags netgo
+#     cd $GOPATH/src/github.com/drone-plugins/drone-email
+#     make deps build
 #     docker build --rm=true -t plugins/drone-email .
 
-FROM gliderlabs/alpine:3.1
-RUN apk-install ca-certificates
+FROM alpine:3.2
+
+RUN apk update && \
+  apk add \
+    ca-certificates && \
+  rm -rf /var/cache/apk/*
+
 ADD drone-email /bin/
 ENTRYPOINT ["/bin/drone-email"]

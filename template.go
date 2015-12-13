@@ -18,10 +18,10 @@ var successTemplate = template.Must(template.New("_").Parse(`
 	<b>Build was Successful</b>
 	(<a href="{{.System.Link}}/{{.Repo.Owner}}/{{.Repo.Name}}/{{.Build.Number}}">see results</a>)
 </p>
-<p>Repository : {{.Repo.Owner}}/{{.Repo.Name}}</p>
-<p>Commit     : {{.Build.Commit}}</p>
-<p>Author     : {{.Build.Author}}</p>
-<p>Branch     : {{.Build.Branch}}</p>
+<p>Repository: {{.Repo.Owner}}/{{.Repo.Name}}</p>
+<p>Commit: {{.Build.Commit}}</p>
+<p>Author: {{.Build.Author}}</p>
+<p>Branch: {{.Build.Branch}}</p>
 <p>Message:</p>
 <p>{{ .Build.Message }}</p>
 `))
@@ -32,10 +32,10 @@ var failureTemplate = template.Must(template.New("_").Parse(`
 	<b>Build Failed</b>
 	(<a href="{{.System.Link}}/{{.Repo.Owner}}/{{.Repo.Name}}/{{.Build.Number}}">see results</a>)
 </p>
-<p>Repository : {{.Repo.Owner}}/{{.Repo.Name}}</p>
-<p>Commit     : {{.Build.Commit}}</p>
-<p>Author     : {{.Build.Author}}</p>
-<p>Branch     : {{.Build.Branch}}</p>
+<p>Repository: {{.Repo.Owner}}/{{.Repo.Name}}</p>
+<p>Commit: {{.Build.Commit}}</p>
+<p>Author: {{.Build.Author}}</p>
+<p>Branch: {{.Build.Branch}}</p>
 <p>Message:</p>
 <p>{{ .Build.Message }}</p>
 `))
