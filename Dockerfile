@@ -1,8 +1,7 @@
 # Docker image for the Drone Email plugin
 #
 #     cd $GOPATH/src/github.com/drone-plugins/drone-email
-#     make deps build
-#     docker build --rm=true -t plugins/drone-email .
+#     make deps build docker
 
 FROM alpine:3.2
 
