@@ -48,8 +48,7 @@ EOF
 Build the Docker container using `make`:
 
 ```sh
-make deps build
-docker build --rm=true -t plugins/drone-email .
+make deps build docker
 ```
 
 ### Example
