@@ -32,6 +32,14 @@ func main() {
 		}
 	}
 
+	if vargs.Subject == "" {
+		vargs.Subject = defaultSubject
+	}
+
+	if vargs.Template == "" {
+		vargs.Template = defaultTemplate
+	}
+
 	if vargs.Port == 0 {
 		vargs.Port = 587
 	}
@@ -45,8 +53,6 @@ func main() {
 
 	if err != nil {
 		fmt.Println(err)
-
 		os.Exit(1)
-		return
 	}
 }
