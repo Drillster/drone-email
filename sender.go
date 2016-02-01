@@ -1,116 +1,113 @@
 package main
 
 import (
-	"bytes"
-	"fmt"
-	"net"
-	"net/smtp"
-	"strconv"
-	"strings"
+	"crypto/tls"
 
 	"github.com/drone/drone-go/drone"
-)
-
-const (
-	Subject = "[%s] %s/%s (%s - %s)"
+	"github.com/drone/drone-go/template"
+	"github.com/go-gomail/gomail"
+	"github.com/jaytaylor/html2text"
 )
 
 func Send(context *Context) error {
-	switch context.Build.Status {
-	case drone.StatusSuccess:
-		return SendSuccess(context)
-	default:
-		return SendFailure(context)
+	payload := &drone.Payload{
+		System: &context.System,
+		Repo:   &context.Repo,
+		Build:  &context.Build,
 	}
-}
 
-// SendFailure sends email notifications to the list of
-// recipients indicating the build failed.
-func SendFailure(context *Context) error {
-	// generate the email failure template
-	var buf bytes.Buffer
-	err := failureTemplate.ExecuteTemplate(&buf, "_", context)
+	subject, plain, html, err := build(
+		payload,
+		context,
+	)
 
 	if err != nil {
 		return err
 	}
 
-	// generate the email subject
-	var subject = fmt.Sprintf(
-		Subject,
-		context.Build.Status,
-		context.Repo.Owner,
-		context.Repo.Name,
-		context.Build.Branch,
-		context.Build.Commit[:8],
+	return send(
+		subject,
+		plain,
+		html,
+		context,
 	)
-
-	return send(subject, buf.String(), context)
 }
 
-// SendSuccess sends email notifications to the list of
-// recipients indicating the build was a success.
-func SendSuccess(context *Context) error {
-	// generate the email success template
-	var buf bytes.Buffer
-	err := successTemplate.ExecuteTemplate(&buf, "_", context)
+func build(payload *drone.Payload, context *Context) (string, string, string, error) {
+	subject, err := template.RenderTrim(
+		context.Vargs.Subject,
+		payload)
 
 	if err != nil {
-		return err
+		return "", "", "", err
 	}
 
-	// generate the email subject
-	var subject = fmt.Sprintf(
-		Subject,
-		context.Build.Status,
-		context.Repo.Owner,
-		context.Repo.Name,
-		context.Build.Branch,
-		context.Build.Commit[:8],
+	html, err := template.RenderTrim(
+		context.Vargs.Template,
+		payload,
 	)
 
-	return send(subject, buf.String(), context)
+	if err != nil {
+		return "", "", "", err
+	}
+
+	plain, err := html2text.FromString(
+		html,
+	)
+
+	if err != nil {
+		return "", "", "", err
+	}
+
+	return subject, plain, html, nil
 }
 
-func send(subject, body string, c *Context) error {
+func send(subject, plainBody, htmlBody string, c *Context) error {
 	if len(c.Vargs.Recipients) == 0 {
 		c.Vargs.Recipients = []string{
 			c.Build.Email,
 		}
 	}
 
-	var auth smtp.Auth
+	m := gomail.NewMessage()
 
-	var addr = net.JoinHostPort(
+	m.SetHeader(
+		"To",
+		c.Vargs.Recipients...,
+	)
+
+	m.SetHeader(
+		"From",
+		c.Vargs.From,
+	)
+
+	m.SetHeader(
+		"Subject",
+		subject,
+	)
+
+	m.AddAlternative(
+		"text/plain",
+		plainBody,
+	)
+
+	m.AddAlternative(
+		"text/html",
+		htmlBody,
+	)
+
+	d := gomail.NewPlainDialer(
 		c.Vargs.Host,
-		strconv.Itoa(c.Vargs.Port))
+		c.Vargs.Port,
+		c.Vargs.Username,
+		c.Vargs.Password,
+	)
 
-	// setup the authentication to the smtp server
-	// if the username and password are provided.
-	if len(c.Vargs.Username) > 0 {
-		auth = smtp.PlainAuth(
-			"",
-			c.Vargs.Username,
-			c.Vargs.Password,
-			c.Vargs.Host)
+	if c.Vargs.SkipVerify {
+		d.TLSConfig = &tls.Config{
+			InsecureSkipVerify: true,
+		}
 	}
 
-	// genereate the raw email message
-	var to = strings.Join(
-		c.Vargs.Recipients,
-		",")
-
-	var raw = fmt.Sprintf(
-		rawMessage,
-		c.Vargs.From,
-		to,
-		subject,
-		body)
-
-	return smtp.SendMail(
-		addr,
-		auth,
-		c.Vargs.From,
-		c.Vargs.Recipients,
-		[]byte(raw))
+	return d.DialAndSend(m)
 }

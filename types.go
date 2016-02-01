@@ -11,6 +11,9 @@ type Params struct {
 	From       string   `json:"from"`
 	Username   string   `json:"username"`
 	Password   string   `json:"password"`
+	Subject    string   `json:"subject"`
+	Template   string   `json:"template"`
+	SkipVerify bool     `json:"skip_verify"`
 }
 
 type Context struct {
