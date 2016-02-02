@@ -3,6 +3,7 @@ package main
 import (
 	"crypto/tls"
 
+	"github.com/aymerick/douceur/inliner"
 	"github.com/drone/drone-go/drone"
 	"github.com/drone/drone-go/template"
 	"github.com/go-gomail/gomail"
@@ -42,10 +43,16 @@ func build(payload *drone.Payload, context *Context) (string, string, string, er
 		return "", "", "", err
 	}
 
-	html, err := template.RenderTrim(
+	body, err := template.RenderTrim(
 		context.Vargs.Template,
 		payload,
 	)
+
+	if err != nil {
+		return "", "", "", err
+	}
+
+	html, err := inliner.Inline(body)
 
 	if err != nil {
 		return "", "", "", err
