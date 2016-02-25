@@ -4,7 +4,7 @@
 [![Coverage Status](https://aircover.co/badges/drone-plugins/drone-email/coverage.svg)](https://aircover.co/drone-plugins/drone-email)
 [![](https://badge.imagelayers.io/plugins/drone-email:latest.svg)](https://imagelayers.io/?images=plugins/drone-email:latest 'Get your own badge on imagelayers.io')
 
-Drone plugin to send build status notifications via Email
+Drone plugin to send build status notifications via Email. For the usage information and a listing of the available options please take a look at [the docs](DOCS.md).
 
 ## Binary
 
