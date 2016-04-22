@@ -103,12 +103,21 @@ func send(subject, plainBody, htmlBody string, c *Context) error {
 		htmlBody,
 	)
 
-	d := gomail.NewPlainDialer(
-		c.Vargs.Host,
-		c.Vargs.Port,
-		c.Vargs.Username,
-		c.Vargs.Password,
-	)
+	var d *gomail.Dialer
+	if c.Vargs.Username == "" {
+		d = &gomail.Dialer{
+			Host: c.Vargs.Host,
+			Port: c.Vargs.Port,
+			SSL:  c.Vargs.Port == 465,
+		}
+	} else {
+		d = gomail.NewDialer(
+			c.Vargs.Host,
+			c.Vargs.Port,
+			c.Vargs.Username,
+			c.Vargs.Password,
+		)
+	}
 
 	if c.Vargs.SkipVerify {
 		d.TLSConfig = &tls.Config{
