@@ -1,0 +1,27 @@
+vendors:
+- path: github.com/PuerkitoBio/goquery
+  rev: aeecb06b1e04a72e7d3312468c5b92f6bb2f3459
+- path: github.com/andybalholm/cascadia
+  rev: 3ad29d1ad1c4f2023e355603324348cf1f4b2d48
+- path: github.com/aymerick/douceur
+  rev: 7176f146738114e7386d4f915a0bbf55945e22c9
+- path: github.com/aymerick/raymond
+  rev: a2232af10b53ef1ae5a767f5178db3a6c1dab655
+- path: github.com/drone/drone-go
+  rev: eaa41f7836a191224ec5702d2458db07882ec269
+- path: github.com/go-gomail/gomail
+  rev: 81ebce5c23dfd25c6c67194b37d3dd3f338c98b1
+- path: github.com/golang/protobuf
+  rev: 0c1f6d65b5a189c2250d10e71a5506f06f9fa0a0
+- path: github.com/gorilla/css
+  rev: a80e24ada2699166544311f07c26ef37eaf64012
+- path: github.com/jaytaylor/html2text
+  rev: 52d9b785554a1918cb09909b89a1509a98b853fd
+- path: golang.org/x/net
+  rev: 3f122ce3dbbe488b7e6a8bdb26f41edec852a40b
+- path: golang.org/x/oauth2
+  rev: 65a8d08c6292395d47053be10b3c5e91960def76
+- path: google.golang.org/appengine
+  rev: 7f59a8c76b8594d06044bfe0bcbe475cb2020482
+- path: gopkg.in/alexcesaro/quotedprintable.v3
+  rev: 2caba252f4dc53eaf6b553000885530023f54623
