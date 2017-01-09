@@ -26,5 +26,3 @@ _testmain.go
 
 coverage.out
 drone-email
-
-/vendor/*/

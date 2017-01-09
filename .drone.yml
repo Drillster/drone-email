@@ -9,8 +9,6 @@ pipeline:
       - CGO_ENABLED=0
       - GOPATH=/go
     commands:
-      - go get -u github.com/kardianos/govendor
-      - govendor sync
       - go vet
       - go test -cover -coverprofile=coverage.out
       - go build -ldflags "-s -w -X main.build=$DRONE_BUILD_NUMBER" -a -tags netgo
