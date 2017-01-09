@@ -69,6 +69,12 @@
 			"revisionTime": "2016-10-29T20:57:26Z"
 		},
 		{
+			"checksumSHA1": "r9QAC5sy2x31xXACelCXYyUjdCs=",
+			"path": "github.com/drone/drone-go/template",
+			"revision": "e34150a175e665a5fa94218fc7ab9986a0bd7732",
+			"revisionTime": "2016-07-28T16:26:28Z"
+		},
+		{
 			"checksumSHA1": "UNlILKZlAiLwYYwj70y+Q8n13D0=",
 			"path": "github.com/gorilla/css/scanner",
 			"revision": "a80e24ada2699166544311f07c26ef37eaf64012",

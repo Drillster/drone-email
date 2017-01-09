@@ -12,9 +12,9 @@ import (
 var build = "0" // build number set at compile-time
 
 func main() {
-	err := godotenv.Load()
-	if err == nil {
-		log.Infoln("Loaded from environment from env-file (.env)!")
+	// Load env-file if it exists first
+	if env := os.Getenv("PLUGIN_ENV_FILE"); env != "" {
+		godotenv.Load(env)
 	}
 
 	app := cli.NewApp()
@@ -167,12 +167,6 @@ func main() {
 			Name:   "job.started",
 			Usage:  "job started",
 			EnvVar: "DRONE_JOB_STARTED",
-		},
-
-		// .env file
-		cli.StringFlag{
-			Name:  "env-file",
-			Usage: "source env file",
 		},
 	}
 

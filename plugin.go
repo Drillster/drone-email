@@ -4,6 +4,7 @@ import (
 	"crypto/tls"
 	log "github.com/Sirupsen/logrus"
 	"github.com/aymerick/douceur/inliner"
+	"github.com/drone/drone-go/template"
 	"github.com/jaytaylor/html2text"
 	"gopkg.in/gomail.v2"
 )
@@ -97,7 +98,7 @@ func (p Plugin) Exec() error {
 	}
 
 	// Render body in HTML and plain text
-	renderedBody, err := RenderTrim(p.Config.Body, ctx)
+	renderedBody, err := template.RenderTrim(p.Config.Body, ctx)
 	if err != nil {
 		log.Errorf("Could not render body template: %v", err)
 		return err
@@ -114,7 +115,7 @@ func (p Plugin) Exec() error {
 	}
 
 	// Render subject
-	subject, err := RenderTrim(p.Config.Subject, ctx)
+	subject, err := template.RenderTrim(p.Config.Subject, ctx)
 	if err != nil {
 		log.Errorf("Could not render subject template: %v", err)
 		return err
