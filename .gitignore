@@ -22,6 +22,9 @@ _testmain.go
 *.exe
 *.test
 *.prof
+.env
 
 coverage.out
 drone-email
+
+/vendor/*/

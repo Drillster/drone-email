@@ -1,293 +1,137 @@
 package main
 
-var defaultSubject = `
-[{{ build.status }}] {{ repo.owner }}/{{ repo.name }} ({{ build.branch }} - {{ truncate build.commit 8 }})
-`
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"net/url"
+	"strings"
+	"time"
+	"unicode"
+	"unicode/utf8"
 
-var defaultTemplate = `
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	"github.com/aymerick/raymond"
+)
 
-    <style>
-      * {
-        margin: 0;
-        padding: 0;
-        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-        box-sizing: border-box;
-        font-size: 14px;
-      }
+func init() {
+	raymond.RegisterHelpers(funcs)
+}
 
-      body {
-        -webkit-font-smoothing: antialiased;
-        -webkit-text-size-adjust: none;
-        width: 100% !important;
-        height: 100%;
-        line-height: 1.6;
-        background-color: #f6f6f6;
-      }
+// Render parses and executes a template, returning the results in string format.
+func Render(template string, payload interface{}) (s string, err error) {
+	u, err := url.Parse(template)
+	if err == nil {
+		switch u.Scheme {
+		case "http", "https":
+			res, err := http.Get(template)
+			if err != nil {
+				return s, err
+			}
+			defer res.Body.Close()
+			out, err := ioutil.ReadAll(res.Body)
+			if err != nil {
+				return s, err
+			}
+			template = string(out)
 
-      table td {
-        vertical-align: top;
-      }
+		case "file":
+			out, err := ioutil.ReadFile(u.Path)
+			if err != nil {
+				return s, err
+			}
+			template = string(out)
+		}
+	}
 
-      .body-wrap {
-        background-color: #f6f6f6;
-        width: 100%;
-      }
+	return raymond.Render(template, payload)
+}
 
-      .container {
-        display: block !important;
-        max-width: 600px !important;
-        margin: 0 auto !important;
-        /* makes it centered */
-        clear: both !important;
-      }
+// RenderTrim parses and executes a template, returning the results in string
+// format. The result is trimmed to remove left and right padding and newlines
+// that may be added unintentially in the template markup.
+func RenderTrim(template string, playload interface{}) (string, error) {
+	out, err := Render(template, playload)
+	return strings.Trim(out, " \n"), err
+}
 
-      .content {
-        max-width: 600px;
-        margin: 0 auto;
-        display: block;
-        padding: 20px;
-      }
+var funcs = map[string]interface{}{
+	"uppercasefirst": uppercaseFirst,
+	"uppercase":      strings.ToUpper,
+	"lowercase":      strings.ToLower,
+	"duration":       toDuration,
+	"datetime":       toDatetime,
+	"success":        isSuccess,
+	"failure":        isFailure,
+	"truncate":       truncate,
+	"urlencode":      urlencode,
+	"since":          since,
+}
 
-      .main {
-        background: #fff;
-        border: 1px solid #e9e9e9;
-        border-radius: 3px;
-      }
+func truncate(s string, len int) string {
+	if utf8.RuneCountInString(s) <= len {
+		return s
+	}
+	runes := []rune(s)
+	return string(runes[:len])
 
-      .content-wrap {
-        padding: 20px;
-      }
+}
 
-      .content-block {
-        padding: 0 0 20px;
-      }
+func uppercaseFirst(s string) string {
+	a := []rune(s)
+	a[0] = unicode.ToUpper(a[0])
+	s = string(a)
+	return s
+}
 
-      .header {
-        width: 100%;
-        margin-bottom: 20px;
-      }
+func toDuration(started, finished float64) string {
+	return fmt.Sprintln(time.Duration(finished-started) * time.Second)
+}
 
-      h1, h2, h3 {
-        font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-        color: #000;
-        margin: 40px 0 0;
-        line-height: 1.2;
-        font-weight: 400;
-      }
+func toDatetime(timestamp int64, layout, zone string) string {
+	if len(zone) == 0 {
+		return time.Unix(timestamp, 0).Format(layout)
+	}
+	loc, err := time.LoadLocation(zone)
+	if err != nil {
+		return time.Unix(timestamp, 0).Local().Format(layout)
+	}
+	return time.Unix(timestamp, 0).In(loc).Format(layout)
+}
 
-      h1 {
-        font-size: 32px;
-        font-weight: 500;
-      }
+func isSuccess(conditional bool, options *raymond.Options) string {
+	if !conditional {
+		return options.Inverse()
+	}
 
-      h2 {
-        font-size: 24px;
-      }
+	switch options.ParamStr(0) {
+	case "success":
+		return options.Fn()
+	default:
+		return options.Inverse()
+	}
+}
 
-      h3 {
-        font-size: 18px;
-      }
+func isFailure(conditional bool, options *raymond.Options) string {
+	if !conditional {
+		return options.Inverse()
+	}
 
-      hr {
-        border: 1px solid #e9e9e9;
-        margin: 20px 0;
-        height: 1px;
-        padding: 0;
-      }
+	switch options.ParamStr(0) {
+	case "failure", "error", "killed":
+		return options.Fn()
+	default:
+		return options.Inverse()
+	}
+}
 
-      p,
-      ul,
-      ol {
-        margin-bottom: 10px;
-        font-weight: normal;
-      }
+func urlencode(options *raymond.Options) string {
+	return url.QueryEscape(options.Fn())
+}
 
-      p li,
-      ul li,
-      ol li {
-        margin-left: 5px;
-        list-style-position: inside;
-      }
-
-      a {
-        color: #348eda;
-        text-decoration: underline;
-      }
-
-      .last {
-        margin-bottom: 0;
-      }
-
-      .first {
-        margin-top: 0;
-      }
-
-      .padding {
-        padding: 10px 0;
-      }
-
-      .aligncenter {
-        text-align: center;
-      }
-
-      .alignright {
-        text-align: right;
-      }
-
-      .alignleft {
-        text-align: left;
-      }
-
-      .clear {
-        clear: both;
-      }
-
-      .alert {
-        font-size: 16px;
-        color: #fff;
-        font-weight: 500;
-        padding: 20px;
-        text-align: center;
-        border-radius: 3px 3px 0 0;
-      }
-
-      .alert a {
-        color: #fff;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 16px;
-      }
-
-      .alert.alert-warning {
-        background: #ff9f00;
-      }
-
-      .alert.alert-bad {
-        background: #d0021b;
-      }
-
-      .alert.alert-good {
-        background: #68b90f;
-      }
-
-      @media only screen and (max-width: 640px) {
-        h1,
-        h2,
-        h3 {
-          font-weight: 600 !important;
-          margin: 20px 0 5px !important;
-        }
-
-        h1 {
-          font-size: 22px !important;
-        }
-
-        h2 {
-          font-size: 18px !important;
-        }
-
-        h3 {
-          font-size: 16px !important;
-        }
-
-        .container {
-          width: 100% !important;
-        }
-
-        .content,
-        .content-wrapper {
-          padding: 10px !important;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <table class="body-wrap">
-      <tr>
-        <td></td>
-        <td class="container" width="600">
-          <div class="content">
-            <table class="main" width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                {{#success build.status}}
-                  <td class="alert alert-good">
-                    <a href="{{ system.link_url }}/{{ repo.owner }}/{{ repo.name }}/{{ build.number }}">
-                      Successful build #{{ build.number }}
-                    </a>
-                  </td>
-                {{else}}
-                  <td class="alert alert-bad">
-                    <a href="{{ system.link_url }}/{{ repo.owner }}/{{ repo.name }}/{{ build.number }}">
-                      Failed build #{{ build.number }}
-                    </a>
-                  </td>
-                {{/success}}
-              </tr>
-              <tr>
-                <td class="content-wrap">
-                  <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td>
-                        Repo:
-                      </td>
-                      <td>
-                        {{ repo.owner }}/{{ repo.name }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Author:
-                      </td>
-                      <td>
-                        {{ build.author }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Branch:
-                      </td>
-                      <td>
-                        {{ build.branch }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Commit:
-                      </td>
-                      <td>
-                        {{ truncate build.commit 8 }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Time:
-                      </td>
-                      <td>
-                        {{ duration build.started_at build.finished_at }}
-                      </td>
-                    </tr>
-                  </table>
-                  <hr>
-                  <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td>
-                        {{ build.message }}
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </td>
-        <td></td>
-      </tr>
-    </table>
-  </body>
-</html>
-`
+func since(start int64) string {
+	// NOTE: not using `time.Since()` because the fractional second component
+	// will give us something like "40m12.917523438s" vs "40m12s". We lose
+	// some precision, but the format is much more readable.
+	now := time.Unix(time.Now().Unix(), 0)
+	return fmt.Sprintln(now.Sub(time.Unix(start, 0)))
+}
