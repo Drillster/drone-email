@@ -85,10 +85,10 @@ func (p Plugin) Exec() error {
 	}
 
 	type Context struct {
-		Job    interface{}
-		Repo   interface{}
-		Build  interface{}
-		Config interface{}
+		Job    Job
+		Repo   Repo
+		Build  Build
+		Config Config
 	}
 	ctx := Context{
 		Job:    p.Job,

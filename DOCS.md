@@ -14,13 +14,6 @@ You can configure the plugin using the following parameters:
 * **subject** - The subject line template
 * **body** - The email body template
 
-The following secret values can be set to configure the plugin:
-* **EMAIL_HOST** - corresponds to **host**
-* **EMAIL_PORT** - corresponds to **port**
-* **EMAIL_USERNAME** - corresponds to **username**
-* **EMAIL_PASSWORD** - corresponds to **password**
-* **EMAIL_RECIPIENTS** - corresponds to **recipients**
-
 ## Example
 
 The following is a sample configuration in your .drone.yml file:
@@ -36,6 +29,45 @@ pipeline:
     recipients:
       - octocat@github.com
 ```
+
+### Secrets
+The Email plugin supports reading credentials and other parameters from the Drone secret store. This is strongly recommended instead of storing credentials in the pipeline configuration in plain text.
+
+```diff
+pipeline:
+  notify:
+    image: plugins/email
+    from: noreply@github.com
+    host: smtp.mailgun.org
+-   username: octocat
+-   password: 12345
+    recipients:
+      - octocat@github.com
+```
+
+Use the command line utility to add the secrets to the store:
+
+```sh
+drone secret add --image=plugins/email \
+    octocat/hello-world EMAIL_USERNAME octocat
+drone secret add --image=plugins/email \
+    octocat/hello-world EMAIL_PASSWORD 12345
+```
+
+Then sign the YAML file after all secrets are added:
+
+```sh
+drone sign octocat/hello-world
+```
+
+The following secret values can be set to configure the plugin:
+* **EMAIL_HOST** - corresponds to **host**
+* **EMAIL_PORT** - corresponds to **port**
+* **EMAIL_USERNAME** - corresponds to **username**
+* **EMAIL_PASSWORD** - corresponds to **password**
+* **EMAIL_RECIPIENTS** - corresponds to **recipients**
+
+See [Secret Guide](http://readme.drone.io/usage/secret-guide/) for additional information on secrets.
 
 ### Custom Templates
 
