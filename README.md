@@ -22,14 +22,14 @@ Build the docker image with the following commands:
 
 ```
 CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -tags netgo
-docker build -t plugins/slack .
+docker build -t plugins/email .
 ```
 
 Please note incorrectly building the image for the correct x64 linux and with GCO disabled will result in an error when running the Docker image:
 
 ```
 docker: Error response from daemon: Container command
-'/bin/drone-slack' not found or does not exist..
+'/bin/drone-email' not found or does not exist..
 ```
 
 ### Example
@@ -51,5 +51,5 @@ docker run --rm \
   -e DRONE_BUILD_STATUS=success \
   -e DRONE_BUILD_LINK=http://github.com/octocat/hello-world \
   -e DRONE_COMMIT_MESSAGE="Hello world!" \
-  plugins/slack
+  plugins/email
 ```
