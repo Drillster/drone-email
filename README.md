@@ -51,5 +51,7 @@ docker run --rm \
   -e DRONE_BUILD_STATUS=success \
   -e DRONE_BUILD_LINK=http://github.com/octocat/hello-world \
   -e DRONE_COMMIT_MESSAGE="Hello world!" \
+  -v $(pwd):$(pwd) \
+  -w $(pwd) \
   plugins/email
 ```
