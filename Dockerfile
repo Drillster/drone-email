@@ -1,14 +1,7 @@
-# Docker image for the Drone Email plugin
-#
-#     cd $GOPATH/src/github.com/drone-plugins/drone-email
-#     make deps build docker
-
-FROM alpine:3.2
+FROM alpine:3.4
 
 RUN apk update && \
-  apk add \
-    ca-certificates && \
-  rm -rf /var/cache/apk/*
+    apk add --no-cache ca-certificates
 
 ADD drone-email /bin/
 ENTRYPOINT ["/bin/drone-email"]
