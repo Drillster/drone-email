@@ -9,4 +9,4 @@ build:
 	docker build -t drillster/drone-email:latest .
 
 publish:
-	publish.sh	
+	bash publish.sh	
