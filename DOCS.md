@@ -21,7 +21,7 @@ The following is a sample configuration in your .drone.yml file:
 ```yaml
 pipeline:
   notify:
-    image: plugins/email
+    image: drillster/drone-email
     from: noreply@github.com
     host: smtp.mailgun.org
     username: octocat
@@ -36,7 +36,7 @@ The Email plugin supports reading credentials and other parameters from the Dron
 ```diff
 pipeline:
   notify:
-    image: plugins/email
+    image: drillster/drone-email
     from: noreply@github.com
     host: smtp.mailgun.org
 -   username: octocat
@@ -48,9 +48,9 @@ pipeline:
 Use the command line utility to add the secrets to the store:
 
 ```sh
-drone secret add --image=plugins/email \
+drone secret add --image=drillster/drone-email \
     octocat/hello-world EMAIL_USERNAME octocat
-drone secret add --image=plugins/email \
+drone secret add --image=drillster/drone-email \
     octocat/hello-world EMAIL_PASSWORD 12345
 ```
 
@@ -78,17 +78,17 @@ provided as a string or as a remote URL which gets fetched and parsed:
 
 * **subject** - A handlebars template to create a custom subject. For more
   details take a look at the [docs](http://handlebarsjs.com/). You can see the
-  default template [here](https://github.com/drone-plugins/drone-email/blob/master/defaults.go#L14)
+  default template [here](https://github.com/Drillster/drone-email/blob/master/defaults.go#L14)
 * **body** - A handlebars template to create a custom template. For more
   details take a look at the [docs](http://handlebarsjs.com/). You can see the
-  default template [here](https://github.com/drone-plugins/drone-email/blob/master/defaults.go#L19-L267)
+  default template [here](https://github.com/Drillster/drone-email/blob/master/defaults.go#L19-L267)
 
 Example configuration that generate a custom email:
 
 ```yaml
 pipeline:
   notify:
-    image: plugins/email
+    image: drillster/drone-email
     from: noreply@github.com
     host: smtp.mailgun.org
     username: octocat
@@ -115,7 +115,7 @@ Example configuration that skips SSL verification:
 ```yaml
 pipeline:
   notify:
-    image: plugins/email
+    image: drillster/drone-email
     from: noreply@github.com
     host: smtp.mailgun.org
     username: octocat

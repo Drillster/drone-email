@@ -1,10 +1,7 @@
 # drone-email
 
-[![Build Status](http://beta.drone.io/api/badges/drone-plugins/drone-email/status.svg)](http://beta.drone.io/drone-plugins/drone-email)
-[![Go Doc](https://godoc.org/github.com/drone-plugins/drone-email?status.svg)](http://godoc.org/github.com/drone-plugins/drone-email)
-[![Go Report](https://goreportcard.com/badge/github.com/drone-plugins/drone-email)](https://goreportcard.com/report/github.com/drone-plugins/drone-email)
-[![Join the chat at https://gitter.im/drone/drone](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/drone/drone)
-
+[![Go Doc](https://godoc.org/github.com/Drillster/drone-email?status.svg)](http://godoc.org/github.com/Drillster/drone-email)
+[![Go Report](https://goreportcard.com/badge/github.com/Drillster/drone-email)](https://goreportcard.com/report/github.com/Drillster/drone-email)
 
 Drone plugin to send build status notifications via Email. For the usage information and a listing of the available options please take a look at [the docs](DOCS.md).
 
@@ -21,10 +18,10 @@ go build
 Build the docker image with the following commands:
 
 ```
-CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -a -tags netgo
-docker build -t plugins/email .
+make build
 ```
 
+This will create a Docker image called `drillster/drone-email:latest`.
 Please note incorrectly building the image for the correct x64 linux and with GCO disabled will result in an error when running the Docker image:
 
 ```
@@ -53,5 +50,5 @@ docker run --rm \
   -e DRONE_COMMIT_MESSAGE="Hello world!" \
   -v $(pwd):$(pwd) \
   -w $(pwd) \
-  plugins/email
+  drillster/drone-email
 ```

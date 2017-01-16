@@ -31,6 +31,10 @@
     name = "Aurélien Thieriot"
     email = "a.thieriot@gmail.com"
     login = "athieriot"
+  [people.mjwwit]
+    name = "Michael de Wit"
+    email = "mjwwit@gmail.com"
+    login = "mjwwit"
 
 [org]
   [org.core]
@@ -42,5 +46,6 @@
       "msteinert",
       "nlf",
       "tboerger",
-      "athieriot"
+      "athieriot",
+      "mjwwit"
     ]

@@ -1,15 +1,12 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	log "github.com/Sirupsen/logrus"
 	"github.com/joho/godotenv"
 	"github.com/urfave/cli"
 )
-
-var build = "0" // build number set at compile-time
 
 func main() {
 	// Load env-file if it exists first
@@ -21,7 +18,7 @@ func main() {
 	app.Name = "email plugin"
 	app.Usage = "email plugin"
 	app.Action = run
-	app.Version = fmt.Sprintf("1.0.%s", build)
+	app.Version = "1.0.0"
 	app.Flags = []cli.Flag{
 		// Plugin environment
 		cli.StringFlag{
