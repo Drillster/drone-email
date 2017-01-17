@@ -11,7 +11,7 @@ const (
 
 // DefaultSubject is the default subject template to use for the email
 const DefaultSubject = `
-[{{ build.status }}] {{ repo.owner }}/{{ repo.name }} ({{ build.branch }} - {{ truncate build.commit 8 }})
+[{{ build.status }}] {{ repo.owner }}/{{ repo.name }} ({{ commit.branch }} - {{ truncate commit.sha 8 }})
 `
 
 // DefaultTemplate is the default body template to use for the email
@@ -219,7 +219,7 @@ const DefaultTemplate = `
                         Author:
                       </td>
                       <td>
-                        {{ build.author.name }} ({{ build.author.email }})
+                        {{ commit.author.name }} ({{ commit.author.email }})
                       </td>
                     </tr>
                     <tr>
@@ -227,7 +227,7 @@ const DefaultTemplate = `
                         Branch:
                       </td>
                       <td>
-                        {{ build.branch }}
+                        {{ commit.branch }}
                       </td>
                     </tr>
                     <tr>
@@ -235,7 +235,7 @@ const DefaultTemplate = `
                         Commit:
                       </td>
                       <td>
-                        {{ truncate build.commit 8 }}
+                        {{ truncate commit.sha 8 }}
                       </td>
                     </tr>
                     <tr>
@@ -251,7 +251,7 @@ const DefaultTemplate = `
                   <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                       <td>
-                        {{ build.message }}
+                        {{ commit.message }}
                       </td>
                     </tr>
                   </table>

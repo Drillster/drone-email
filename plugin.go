@@ -11,8 +11,19 @@ import (
 
 type (
 	Repo struct {
-		Owner string
-		Name  string
+		FullName string
+		Owner    string
+		Name     string
+		SCM      string
+		Link     string
+		Avatar   string
+		Branch   string
+		Private  bool
+		Trusted  bool
+	}
+
+	Remote struct {
+		URL string
 	}
 
 	Author struct {
@@ -21,19 +32,49 @@ type (
 		Avatar string
 	}
 
-	Build struct {
-		Tag     string
-		Event   string
-		Number  int
-		Commit  string
+	Commit struct {
+		Sha     string
 		Ref     string
 		Branch  string
-		Author  Author
-		Message string
-		Status  string
 		Link    string
-		Started int64
-		Created int64
+		Message string
+		Author  Author
+	}
+
+	Build struct {
+		Number   int
+		Event    string
+		Status   string
+		Link     string
+		Created  int64
+		Started  int64
+		Finished int64
+	}
+
+	PrevBuild struct {
+		Status string
+		Number int
+	}
+
+	PrevCommit struct {
+		Sha string
+	}
+
+	Prev struct {
+		Build  PrevBuild
+		Commit PrevCommit
+	}
+
+	Job struct {
+		Status   string
+		ExitCode int
+		Started  int64
+		Finished int64
+	}
+
+	Yaml struct {
+		Signed   bool
+		Verified bool
 	}
 
 	Config struct {
@@ -49,15 +90,18 @@ type (
 		Body           string
 	}
 
-	Job struct {
-		Started int64
-	}
-
 	Plugin struct {
-		Repo   Repo
-		Build  Build
-		Config Config
-		Job    Job
+		Repo        Repo
+		Remote      Remote
+		Commit      Commit
+		Build       Build
+		Prev        Prev
+		Job         Job
+		Yaml        Yaml
+		Tag         string
+		PullRequest int
+		DeployTo    string
+		Config      Config
 	}
 )
 
@@ -66,7 +110,7 @@ func (p Plugin) Exec() error {
 	var dialer *gomail.Dialer
 
 	if !p.Config.RecipientsOnly {
-		p.Config.Recipients = append(p.Config.Recipients, p.Build.Author.Email)
+		p.Config.Recipients = append(p.Config.Recipients, p.Commit.Author.Email)
 	}
 
 	if p.Config.Username == "" && p.Config.Password == "" {
@@ -85,16 +129,28 @@ func (p Plugin) Exec() error {
 	}
 
 	type Context struct {
-		Job    Job
-		Repo   Repo
-		Build  Build
-		Config Config
+		Repo        Repo
+		Remote      Remote
+		Commit      Commit
+		Build       Build
+		Prev        Prev
+		Job         Job
+		Yaml        Yaml
+		Tag         string
+		PullRequest int
+		DeployTo    string
 	}
 	ctx := Context{
-		Job:    p.Job,
-		Repo:   p.Repo,
-		Build:  p.Build,
-		Config: p.Config,
+		Repo:        p.Repo,
+		Remote:      p.Remote,
+		Commit:      p.Commit,
+		Build:       p.Build,
+		Prev:        p.Prev,
+		Job:         p.Job,
+		Yaml:        p.Yaml,
+		Tag:         p.Tag,
+		PullRequest: p.PullRequest,
+		DeployTo:    p.DeployTo,
 	}
 
 	// Render body in HTML and plain text
