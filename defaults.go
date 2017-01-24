@@ -243,7 +243,7 @@ const DefaultTemplate = `
                         Started at:
                       </td>
                       <td>
-                        {{ datetime build.started "Mon Jan 2 15:04:05 MST 2006" "Local" }}
+                        {{ datetime build.created "Mon Jan 2 15:04:05 MST 2006" "Local" }}
                       </td>
                     </tr>
                   </table>

@@ -18,7 +18,7 @@ func main() {
 	app.Name = "email plugin"
 	app.Usage = "email plugin"
 	app.Action = run
-	app.Version = "1.0.0"
+	app.Version = "2.0.1"
 	app.Flags = []cli.Flag{
 		// Plugin environment
 		cli.StringFlag{
