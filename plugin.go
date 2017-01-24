@@ -110,7 +110,16 @@ func (p Plugin) Exec() error {
 	var dialer *gomail.Dialer
 
 	if !p.Config.RecipientsOnly {
-		p.Config.Recipients = append(p.Config.Recipients, p.Commit.Author.Email)
+		exists := false
+		for _, recipient := range p.Config.Recipients {
+			if recipient == p.Commit.Author.Email {
+				exists = true
+			}
+		}
+
+		if !exists {
+			p.Config.Recipients = append(p.Config.Recipients, p.Commit.Author.Email)
+		}
 	}
 
 	if p.Config.Username == "" && p.Config.Password == "" {
