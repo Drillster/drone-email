@@ -197,6 +197,7 @@ func (p Plugin) Exec() error {
 
 		if err := gomail.Send(closer, message); err != nil {
 			log.Errorf("Could not send email to %q: %v", recipient, err)
+			return err
 		}
 		message.Reset()
 	}
