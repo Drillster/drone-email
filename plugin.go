@@ -88,6 +88,7 @@ type (
 		RecipientsOnly bool
 		Subject        string
 		Body           string
+		Attachment     string
 	}
 
 	Plugin struct {
@@ -194,6 +195,10 @@ func (p Plugin) Exec() error {
 		message.SetHeader("Subject", subject)
 		message.AddAlternative("text/plain", plainBody)
 		message.AddAlternative("text/html", html)
+
+		if p.Config.Attachment != "" {
+			message.Attach(p.Config.Attachment)
+		}
 
 		if err := gomail.Send(closer, message); err != nil {
 			log.Errorf("Could not send email to %q: %v", recipient, err)

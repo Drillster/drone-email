@@ -13,6 +13,7 @@ You can configure the plugin using the following parameters:
 * **recipients_only** - Do not send mails to the commit author, but only to **recipients**, defaults to `false`
 * **subject** - The subject line template
 * **body** - The email body template
+* **attachment** - An optional file to attach to the sent mail(s), can be an absolute path or relative to the working directory.
 
 ## Example
 
