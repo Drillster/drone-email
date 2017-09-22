@@ -98,7 +98,7 @@ pipeline:
       [{{ build.status }}]
       {{ repo.owner }}/{{ repo.name }}
       ({{ build.branch }} - {{ truncate build.commit 8 }})
-    template: >
+    body: >
       https://git.io/vgvPz
 ```
 
