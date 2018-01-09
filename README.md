@@ -37,7 +37,7 @@ docker run --rm \
   -e PLUGIN_FROM=drone@test.test \
   -e PLUGIN_HOST=smtp.test.test \
   -e PLUGIN_USERNAME=drone \
-  -e PLUGIN_PASSWORD=test
+  -e PLUGIN_PASSWORD=test \
   -e DRONE_REPO_OWNER=octocat \
   -e DRONE_REPO_NAME=hello-world \
   -e DRONE_COMMIT_SHA=7fd1a60b01f91b314f59955a4e4d4e80d8edf11d \
