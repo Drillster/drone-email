@@ -15,6 +15,15 @@ You can configure the plugin using the following parameters:
 * **body** - The email body template
 * **attachment** - An optional file to attach to the sent mail(s), can be an absolute path or relative to the working directory.
 
+## Secrets
+You can use the following secrets to secure the sensitive configuration of this plugin:
+
+* **email_host** - corresponds to **host**
+* **email_port** - corresponds to **port**
+* **email_username** - corresponds to **username**
+* **email_password** - corresponds to **password**
+* **email_recipients**- corresponds to **recipients**
+
 ## Example
 
 The following is a sample configuration in your .drone.yml file:
@@ -44,31 +53,25 @@ pipeline:
 -   password: 12345
     recipients:
       - octocat@github.com
++   secrets: [ email_username, email_password ]
 ```
 
 Use the command line utility to add the secrets to the store:
 
 ```sh
-drone secret add --image=drillster/drone-email \
-    octocat/hello-world EMAIL_USERNAME octocat
-drone secret add --image=drillster/drone-email \
-    octocat/hello-world EMAIL_PASSWORD 12345
+drone secret add \
+  --repository octocat/hello-world \
+  --name email_username \
+  --value octocat \
+  --image drillster/drone-email
+drone secret add \
+  --repository octocat/hello-world \
+  --name email_password \
+  --value 12345 \
+  --image drillster/drone-email
 ```
 
-Then sign the YAML file after all secrets are added:
-
-```sh
-drone sign octocat/hello-world
-```
-
-The following secret values can be set to configure the plugin:
-* **EMAIL_HOST** - corresponds to **host**
-* **EMAIL_PORT** - corresponds to **port**
-* **EMAIL_USERNAME** - corresponds to **username**
-* **EMAIL_PASSWORD** - corresponds to **password**
-* **EMAIL_RECIPIENTS** - corresponds to **recipients**
-
-See [Secret Guide](http://readme.drone.io/usage/secret-guide/) for additional information on secrets.
+See [Secret Guide](http://docs.drone.io/manage-secrets/) for additional information on secrets.
 
 ### Custom Templates
 
@@ -122,4 +125,29 @@ pipeline:
     username: octocat
     password: 12345
     skip_verify: true
+```
+
+## Secrets in Drone 0.5
+Secret injection has changed for Drone 0.6 and up. To use this plugin with Drone 0.5, use:
+
+```sh
+drone secret add octocat/hello-world EMAIL_PASSWORD 12345
+```
+
+to add the secret. Then add the secret to your `.drone.yml`:
+
+```yaml
+pipeline:
+  notify:
+    image: drillster/drone-email
+    from: noreply@github.com
+    host: smtp.mailgun.org
+    username: octocat
+    password: ${EMAIL_PASSWORD}
+```
+
+and then sign your configuration using:
+
+```sh
+drone sign octocat/hello-world
 ```
