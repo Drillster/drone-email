@@ -1,0 +1,10 @@
+/.env
+/.gitignore
+/Docker*
+/DOCS.md
+/LICENSE
+/logo.svg
+/MAINTAINERS
+/Makefile
+/publish.sh
+/README.md

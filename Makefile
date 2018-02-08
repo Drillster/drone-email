@@ -1,4 +1,4 @@
-all: test build publish
+all: test build
 
 test:
 	go vet
@@ -6,7 +6,3 @@ test:
 
 build:
 	GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build
-	docker build -t drillster/drone-email:latest .
-
-publish:
-	bash publish.sh

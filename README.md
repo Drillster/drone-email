@@ -18,7 +18,7 @@ go build
 Build the docker image with the following commands:
 
 ```
-make build
+docker build -t drillster/drone-email:latest .
 ```
 
 This will create a Docker image called `drillster/drone-email:latest`.
