@@ -190,6 +190,9 @@ func (p Plugin) Exec() error {
 	// Send emails
 	message := gomail.NewMessage()
 	for _, recipient := range p.Config.Recipients {
+		if len(recipient) == 0 {
+			continue
+		}
 		message.SetHeader("From", p.Config.From)
 		message.SetAddressHeader("To", recipient, "")
 		message.SetHeader("Subject", subject)
