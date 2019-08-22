@@ -6,7 +6,6 @@ import (
 	"github.com/aymerick/douceur/inliner"
 	"github.com/drone/drone-go/template"
 	"github.com/jaytaylor/html2text"
-	"gopkg.in/gomail.v2"
 )
 
 type (
@@ -88,7 +87,7 @@ type (
 		RecipientsOnly bool
 		Subject        string
 		Body           string
-		Attachment     string
+		Attachments    []string
 	}
 
 	Plugin struct {
@@ -199,8 +198,8 @@ func (p Plugin) Exec() error {
 		message.AddAlternative("text/plain", plainBody)
 		message.AddAlternative("text/html", html)
 
-		if p.Config.Attachment != "" {
-			message.Attach(p.Config.Attachment)
+		for _, attachment := range p.Config.Attachments {
+			message.Attach(attachment)
 		}
 
 		if err := gomail.Send(closer, message); err != nil {
