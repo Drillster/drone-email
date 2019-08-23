@@ -6,6 +6,7 @@ import (
 	"github.com/aymerick/douceur/inliner"
 	"github.com/drone/drone-go/template"
 	"github.com/jaytaylor/html2text"
+	"gopkg.in/gomail.v2"
 )
 
 type (
