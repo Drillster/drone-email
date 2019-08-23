@@ -89,6 +89,7 @@ type (
 		Subject        string
 		Body           string
 		Attachment     string
+		Attachments    []string
 	}
 
 	Plugin struct {
@@ -201,6 +202,10 @@ func (p Plugin) Exec() error {
 
 		if p.Config.Attachment != "" {
 			message.Attach(p.Config.Attachment)
+		}
+
+		for _, attachment := range p.Config.Attachments {
+			message.Attach(attachment)
 		}
 
 		if err := gomail.Send(closer, message); err != nil {

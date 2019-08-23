@@ -79,6 +79,11 @@ func main() {
 			Usage:  "attachment filename",
 			EnvVar: "PLUGIN_ATTACHMENT",
 		},
+		cli.StringSliceFlag{
+			Name:   "attachments",
+			Usage:  "attachment filename(s)",
+			EnvVar: "PLUGIN_ATTACHMENTS",
+		},
 
 		// Drone environment
 		// Repo
@@ -375,6 +380,7 @@ func run(c *cli.Context) error {
 			Subject:        c.String("template.subject"),
 			Body:           c.String("template.body"),
 			Attachment:     c.String("attachment"),
+			Attachments:    c.StringSlice("attachments"),
 		},
 	}
 
