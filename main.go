@@ -74,10 +74,15 @@ func main() {
 			Usage:  "body template",
 			EnvVar: "PLUGIN_BODY",
 		},
+		cli.StringFlag{
+			Name:   "attachment",
+			Usage:  "attachment filename",
+			EnvVar: "PLUGIN_ATTACHMENT",
+		},
 		cli.StringSliceFlag{
 			Name:   "attachments",
 			Usage:  "attachment filename(s)",
-			EnvVar: "PLUGIN_ATTACHMENT",
+			EnvVar: "PLUGIN_ATTACHMENTS",
 		},
 
 		// Drone environment
@@ -374,6 +379,7 @@ func run(c *cli.Context) error {
 			RecipientsOnly: c.Bool("recipients.only"),
 			Subject:        c.String("template.subject"),
 			Body:           c.String("template.body"),
+			Attachment:     c.String("attachment"),
 			Attachments:    c.StringSlice("attachments"),
 		},
 	}

@@ -87,6 +87,7 @@ type (
 		RecipientsOnly bool
 		Subject        string
 		Body           string
+		Attachment     string
 		Attachments    []string
 	}
 
@@ -197,6 +198,10 @@ func (p Plugin) Exec() error {
 		message.SetHeader("Subject", subject)
 		message.AddAlternative("text/plain", plainBody)
 		message.AddAlternative("text/html", html)
+
+		if p.Config.Attachment != "" {
+			message.Attach(p.Config.Attachment)
+		}
 
 		for _, attachment := range p.Config.Attachments {
 			message.Attach(attachment)
