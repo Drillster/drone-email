@@ -7,6 +7,7 @@ import (
 	"github.com/drone/drone-go/template"
 	"github.com/jaytaylor/html2text"
 	"gopkg.in/gomail.v2"
+	"os"
 )
 
 type (
@@ -201,11 +202,11 @@ func (p Plugin) Exec() error {
 		message.AddAlternative("text/html", html)
 
 		if p.Config.Attachment != "" {
-			message.Attach(p.Config.Attachment)
+			attach(message, p.Config.Attachment)
 		}
 
 		for _, attachment := range p.Config.Attachments {
-			message.Attach(attachment)
+			attach(message, attachment)
 		}
 
 		if err := gomail.Send(closer, message); err != nil {
@@ -216,4 +217,10 @@ func (p Plugin) Exec() error {
 	}
 
 	return nil
+}
+
+func attach(message *gomail.Message, attachment string) {
+	if _, err := os.Stat(attachment); err == nil {
+		message.Attach(attachment)
+	}
 }
