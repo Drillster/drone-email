@@ -40,6 +40,25 @@ pipeline:
       - octocat@github.com
 ```
 
+For drone version **>=1.0** dont forget to use `settings` key:
+
+```yaml
+kind: pipeline
+type: docker
+name: default
+
+steps:
+- name: notify
+  image: drillster/drone-email
+  settings:
+    from: noreply@github.com
+    host: smtp.mailgun.org
+    username: octocat
+    password: 12345
+    recipients:
+      - octocat@github.com
+```
+
 ### Secrets
 The Email plugin supports reading credentials and other parameters from the Drone secret store. This is strongly recommended instead of storing credentials in the pipeline configuration in plain text.
 
@@ -151,3 +170,4 @@ and then sign your configuration using:
 ```sh
 drone sign octocat/hello-world
 ```
+
