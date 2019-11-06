@@ -7,6 +7,8 @@ const (
 	DefaultOnlyRecipients = false
 	// DefaultSkipVerify controls wether to skip SSL verification for the SMTP server
 	DefaultSkipVerify = false
+  // DefaultClientHostname is the client hostname used in the HELO command sent to the SMTP server
+  DefaultClientHostname = "localhost"
 )
 
 // DefaultSubject is the default subject template to use for the email
