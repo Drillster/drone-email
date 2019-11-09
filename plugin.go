@@ -91,6 +91,7 @@ type (
 		Body           string
 		Attachment     string
 		Attachments    []string
+		ClientHostname   string
 	}
 
 	Plugin struct {
@@ -133,6 +134,7 @@ func (p Plugin) Exec() error {
 	if p.Config.SkipVerify {
 		dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	}
+  dialer.LocalName = p.Config.ClientHostname
 
 	closer, err := dialer.Dial()
 	if err != nil {

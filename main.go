@@ -84,6 +84,13 @@ func main() {
 			Usage:  "attachment filename(s)",
 			EnvVar: "PLUGIN_ATTACHMENTS",
 		},
+    cli.StringFlag{
+			Name:   "clienthostname",
+			Value:  DefaultClientHostname,
+			Usage:  "smtp client hostname",
+			EnvVar: "EMAIL_CLIENTHOSTNAME,PLUGIN_CLIENTHOSTNAME",
+		},
+		
 
 		// Drone environment
 		// Repo
@@ -381,6 +388,7 @@ func run(c *cli.Context) error {
 			Body:           c.String("template.body"),
 			Attachment:     c.String("attachment"),
 			Attachments:    c.StringSlice("attachments"),
+			ClientHostname:   c.String("clienthostname"),
 		},
 	}
 
