@@ -10,8 +10,12 @@ import (
 
 func main() {
 	// Load env-file if it exists first
-	if env := os.Getenv("PLUGIN_ENV_FILE"); env != "" {
-		godotenv.Load(env)
+	envFile, envFileSet := os.LookupEnv("PLUGIN_ENV_FILE")
+	if !envFileSet {
+		envFile = "/run/drone/env"
+	}
+	if _, err := os.Stat(envFile); err == nil {
+		godotenv.Overload(envFile)
 	}
 
 	app := cli.NewApp()
@@ -84,13 +88,12 @@ func main() {
 			Usage:  "attachment filename(s)",
 			EnvVar: "PLUGIN_ATTACHMENTS",
 		},
-    cli.StringFlag{
+		cli.StringFlag{
 			Name:   "clienthostname",
 			Value:  DefaultClientHostname,
 			Usage:  "smtp client hostname",
 			EnvVar: "EMAIL_CLIENTHOSTNAME,PLUGIN_CLIENTHOSTNAME",
 		},
-		
 
 		// Drone environment
 		// Repo
@@ -388,7 +391,7 @@ func run(c *cli.Context) error {
 			Body:           c.String("template.body"),
 			Attachment:     c.String("attachment"),
 			Attachments:    c.StringSlice("attachments"),
-			ClientHostname:   c.String("clienthostname"),
+			ClientHostname: c.String("clienthostname"),
 		},
 	}
 
