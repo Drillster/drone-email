@@ -1,13 +1,15 @@
 package main
 
 import (
+	"bufio"
 	"crypto/tls"
+	"os"
+
 	log "github.com/Sirupsen/logrus"
 	"github.com/aymerick/douceur/inliner"
 	"github.com/drone/drone-go/template"
 	"github.com/jaytaylor/html2text"
 	"gopkg.in/gomail.v2"
-	"os"
 )
 
 type (
@@ -86,12 +88,13 @@ type (
 		Password       string
 		SkipVerify     bool
 		Recipients     []string
+		RecipientsFile string
 		RecipientsOnly bool
 		Subject        string
 		Body           string
 		Attachment     string
 		Attachments    []string
-		ClientHostname   string
+		ClientHostname string
 	}
 
 	Plugin struct {
@@ -126,6 +129,18 @@ func (p Plugin) Exec() error {
 		}
 	}
 
+	if p.Config.RecipientsFile != "" {
+		f, err := os.Open(p.Config.RecipientsFile)
+		if err == nil {
+			scanner := bufio.NewScanner(f)
+			for scanner.Scan() {
+				p.Config.Recipients = append(p.Config.Recipients, scanner.Text())
+			}
+		} else {
+			log.Errorf("Could not open RecipientsFile %s: %v", p.Config.RecipientsFile, err)
+		}
+	}
+
 	if p.Config.Username == "" && p.Config.Password == "" {
 		dialer = &gomail.Dialer{Host: p.Config.Host, Port: p.Config.Port}
 	} else {
@@ -134,7 +149,7 @@ func (p Plugin) Exec() error {
 	if p.Config.SkipVerify {
 		dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	}
-  dialer.LocalName = p.Config.ClientHostname
+	dialer.LocalName = p.Config.ClientHostname
 
 	closer, err := dialer.Dial()
 	if err != nil {

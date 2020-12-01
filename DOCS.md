@@ -10,6 +10,7 @@ You can configure the plugin using the following parameters:
 * **password** - SMTP password
 * **skip_verify** - Skip verification of SSL certificates, defaults to `false`
 * **recipients** - List of recipients to send this mail to (besides the commit author)
+* **recipients_file** - Filename to load additional recipients from (textfile with one email per line) (besides the commit author)
 * **recipients_only** - Do not send mails to the commit author, but only to **recipients**, defaults to `false`
 * **subject** - The subject line template
 * **body** - The email body template

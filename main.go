@@ -56,6 +56,11 @@ func main() {
 			Usage:  "skip tls verify",
 			EnvVar: "PLUGIN_SKIP_VERIFY",
 		},
+		cli.StringFlag{
+			Name:   "recipients.file",
+			Usage:  "file to read recipients from",
+			EnvVar: "EMAIL_RECIPIENTS_FILE,PLUGIN_RECIPIENTS_FILE",
+		},
 		cli.StringSliceFlag{
 			Name:   "recipients",
 			Usage:  "recipient addresses",
@@ -386,6 +391,7 @@ func run(c *cli.Context) error {
 			Password:       c.String("password"),
 			SkipVerify:     c.Bool("skip.verify"),
 			Recipients:     c.StringSlice("recipients"),
+			RecipientsFile: c.String("recipients.file"),
 			RecipientsOnly: c.Bool("recipients.only"),
 			Subject:        c.String("template.subject"),
 			Body:           c.String("template.body"),
