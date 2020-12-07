@@ -121,7 +121,7 @@ pipeline:
       [{{ build.status }}]
       {{ repo.owner }}/{{ repo.name }}
       ({{ build.branch }} - {{ truncate build.commit 8 }})
-    body: >
+    body:
       https://git.io/vgvPz
 ```
 
