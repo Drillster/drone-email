@@ -44,14 +44,15 @@ The Email plugin supports reading credentials and other parameters from the Dron
 steps:
   - name: notify:
     image: drillster/drone-email
-    from: noreply@github.com
-    host: smtp.mailgun.org
-+   username:
-+     from_secret: email_username
-+   password: 12345
-+     from_secret: email_password
-    recipients:
-      - octocat@github.com
+    settings:
+      from: noreply@github.com
+      host: smtp.mailgun.org
++     username:
++       from_secret: email_username
++     password: 12345
++       from_secret: email_password
+      recipients:
+        - octocat@github.com
 ```
 
 Use the command line utility to add the secrets to the store:
@@ -89,16 +90,17 @@ Example configuration that generate a custom email:
 steps:
   - name: notify
     image: drillster/drone-email
-    from: noreply@github.com
-    host: smtp.mailgun.org
-    username: octocat
-    password: 12345
-    subject: >
-      [{{ build.status }}]
-      {{ repo.owner }}/{{ repo.name }}
-      ({{ build.branch }} - {{ truncate build.commit 8 }})
-    body:
-      https://git.io/vgvPz
+    settings:
+      from: noreply@github.com
+      host: smtp.mailgun.org
+      username: octocat
+      password: 12345
+      subject: >
+        [{{ build.status }}]
+        {{ repo.owner }}/{{ repo.name }}
+        ({{ build.branch }} - {{ truncate build.commit 8 }})
+      body:
+        https://git.io/vgvPz
 ```
 
 ### Skip SSL verify
@@ -116,9 +118,10 @@ Example configuration that skips SSL verification:
 steps:
   - name: notify
     image: drillster/drone-email
-    from: noreply@github.com
-    host: smtp.mailgun.org
-    username: octocat
-    password: 12345
-+   skip_verify: true
+    settings:
+      from: noreply@github.com
+      host: smtp.mailgun.org
+      username: octocat
+      password: 12345
++     skip_verify: true
 ```
