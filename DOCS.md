@@ -16,32 +16,9 @@ You can configure the plugin using the following parameters:
 * **body** - The email body template
 * **attachment** - An optional file to attach to the sent mail(s), can be an absolute path or relative to the working directory.
 
-## Secrets
-You can use the following secrets to secure the sensitive configuration of this plugin:
-
-* **email_host** - corresponds to **host**
-* **email_port** - corresponds to **port**
-* **email_username** - corresponds to **username**
-* **email_password** - corresponds to **password**
-* **email_recipients**- corresponds to **recipients**
-
 ## Example
 
 The following is a sample configuration in your .drone.yml file:
-
-```yaml
-pipeline:
-  notify:
-    image: drillster/drone-email
-    from: noreply@github.com
-    host: smtp.mailgun.org
-    username: octocat
-    password: 12345
-    recipients:
-      - octocat@github.com
-```
-
-For drone version **>=1.0** dont forget to use `settings` key:
 
 ```yaml
 kind: pipeline
@@ -49,31 +26,32 @@ type: docker
 name: default
 
 steps:
-- name: notify
-  image: drillster/drone-email
-  settings:
-    from: noreply@github.com
-    host: smtp.mailgun.org
-    username: octocat
-    password: 12345
-    recipients:
-      - octocat@github.com
+  - name: notify
+    image: drillster/drone-email
+    settings:
+      from: noreply@github.com
+      host: smtp.mailgun.org
+      username: octocat
+      password: 12345
+      recipients:
+        - octocat@github.com
 ```
 
 ### Secrets
 The Email plugin supports reading credentials and other parameters from the Drone secret store. This is strongly recommended instead of storing credentials in the pipeline configuration in plain text.
 
 ```diff
-pipeline:
-  notify:
+steps:
+  - name: notify:
     image: drillster/drone-email
     from: noreply@github.com
     host: smtp.mailgun.org
--   username: octocat
--   password: 12345
++   username:
++     from_secret: email_username
++   password: 12345
++     from_secret: email_password
     recipients:
       - octocat@github.com
-+   secrets: [ email_username, email_password ]
 ```
 
 Use the command line utility to add the secrets to the store:
@@ -82,16 +60,14 @@ Use the command line utility to add the secrets to the store:
 drone secret add \
   --repository octocat/hello-world \
   --name email_username \
-  --value octocat \
-  --image drillster/drone-email
+  --data octocat
 drone secret add \
   --repository octocat/hello-world \
   --name email_password \
-  --value 12345 \
-  --image drillster/drone-email
+  --data 12345
 ```
 
-See [Secret Guide](http://docs.drone.io/manage-secrets/) for additional information on secrets.
+See [Secret Guide](https://docs.drone.io/secret/) for additional information on secrets.
 
 ### Custom Templates
 
@@ -110,8 +86,8 @@ provided as a string or as a remote URL which gets fetched and parsed:
 Example configuration that generate a custom email:
 
 ```yaml
-pipeline:
-  notify:
+steps:
+  - name: notify
     image: drillster/drone-email
     from: noreply@github.com
     host: smtp.mailgun.org
@@ -136,39 +112,13 @@ following additional parameter:
 
 Example configuration that skips SSL verification:
 
-```yaml
-pipeline:
-  notify:
+```diff
+steps:
+  - name: notify
     image: drillster/drone-email
     from: noreply@github.com
     host: smtp.mailgun.org
     username: octocat
     password: 12345
-    skip_verify: true
++   skip_verify: true
 ```
-
-## Secrets in Drone 0.5
-Secret injection has changed for Drone 0.6 and up. To use this plugin with Drone 0.5, use:
-
-```sh
-drone secret add octocat/hello-world EMAIL_PASSWORD 12345
-```
-
-to add the secret. Then add the secret to your `.drone.yml`:
-
-```yaml
-pipeline:
-  notify:
-    image: drillster/drone-email
-    from: noreply@github.com
-    host: smtp.mailgun.org
-    username: octocat
-    password: ${EMAIL_PASSWORD}
-```
-
-and then sign your configuration using:
-
-```sh
-drone sign octocat/hello-world
-```
-
