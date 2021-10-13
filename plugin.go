@@ -81,7 +81,8 @@ type (
 	}
 
 	Config struct {
-		From           string
+		FromAddress    string
+		FromName       string
 		Host           string
 		Port           int
 		Username       string
@@ -212,7 +213,7 @@ func (p Plugin) Exec() error {
 		if len(recipient) == 0 {
 			continue
 		}
-		message.SetHeader("From", p.Config.From)
+		message.SetAddressHeader("From", p.Config.FromAddress, p.Config.FromName)
 		message.SetAddressHeader("To", recipient, "")
 		message.SetHeader("Subject", subject)
 		message.AddAlternative("text/plain", plainBody)

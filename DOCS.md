@@ -3,7 +3,8 @@ Use the Email plugin for sending build status notifications via email.
 ## Config
 You can configure the plugin using the following parameters:
 
-* **from** - Send notifications from this address
+* **from.address** - Send notifications from this address
+* **from.name** - Notifications sender name
 * **host** - SMTP server host
 * **port** - SMTP server port, defaults to `587`
 * **username** - SMTP username
@@ -29,7 +30,8 @@ steps:
   - name: notify
     image: drillster/drone-email
     settings:
-      from: noreply@github.com
+      from.address: noreply@github.com
+      from.name: John Smith
       host: smtp.mailgun.org
       username: octocat
       password: 12345
@@ -45,7 +47,7 @@ steps:
   - name: notify:
     image: drillster/drone-email
     settings:
-      from: noreply@github.com
+      from.address: noreply@github.com
       host: smtp.mailgun.org
 +     username:
 +       from_secret: email_username
@@ -91,7 +93,7 @@ steps:
   - name: notify
     image: drillster/drone-email
     settings:
-      from: noreply@github.com
+      from.address: noreply@github.com
       host: smtp.mailgun.org
       username: octocat
       password: 12345

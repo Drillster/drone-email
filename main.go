@@ -31,6 +31,16 @@ func main() {
 			EnvVar: "PLUGIN_FROM",
 		},
 		cli.StringFlag{
+			Name:   "from.address",
+			Usage:  "from address",
+			EnvVar: "PLUGIN_FROM_ADDRESS",
+		},
+		cli.StringFlag{
+			Name:   "from.name",
+			Usage:  "from name",
+			EnvVar: "PLUGIN_FROM_NAME",
+		},
+		cli.StringFlag{
 			Name:   "host",
 			Usage:  "smtp host",
 			EnvVar: "EMAIL_HOST,PLUGIN_HOST",
@@ -325,6 +335,12 @@ func main() {
 }
 
 func run(c *cli.Context) error {
+
+	var fromAddress string = c.String("from")
+	if fromAddress == "" {
+		fromAddress = c.String("from.address")
+	}
+
 	plugin := Plugin{
 		Repo: Repo{
 			FullName: c.String("repo.fullName"),
@@ -384,7 +400,8 @@ func run(c *cli.Context) error {
 		PullRequest: c.Int("pullRequest"),
 		DeployTo:    c.String("deployTo"),
 		Config: Config{
-			From:           c.String("from"),
+			FromAddress:    fromAddress,
+			FromName:       c.String("from.name"),
 			Host:           c.String("host"),
 			Port:           c.Int("port"),
 			Username:       c.String("username"),
