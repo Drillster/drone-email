@@ -66,6 +66,11 @@ func main() {
 			Usage:  "skip tls verify",
 			EnvVar: "PLUGIN_SKIP_VERIFY",
 		},
+		cli.BoolFlag{
+			Name:   "starttls",
+			Usage:  "Enable/Disable STARTTLS",
+			EnvVar: "PLUGIN_STARTTLS",
+		},
 		cli.StringFlag{
 			Name:   "recipients.file",
 			Usage:  "file to read recipients from",
@@ -407,6 +412,7 @@ func run(c *cli.Context) error {
 			Username:       c.String("username"),
 			Password:       c.String("password"),
 			SkipVerify:     c.Bool("skip.verify"),
+			StartTLS:       c.Bool("starttls"),
 			Recipients:     c.StringSlice("recipients"),
 			RecipientsFile: c.String("recipients.file"),
 			RecipientsOnly: c.Bool("recipients.only"),

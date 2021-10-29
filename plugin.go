@@ -9,7 +9,7 @@ import (
 	"github.com/aymerick/douceur/inliner"
 	"github.com/drone/drone-go/template"
 	"github.com/jaytaylor/html2text"
-	"gopkg.in/gomail.v2"
+	gomail "gopkg.in/mail.v2"
 )
 
 type (
@@ -88,6 +88,7 @@ type (
 		Username       string
 		Password       string
 		SkipVerify     bool
+		StartTLS       bool
 		Recipients     []string
 		RecipientsFile string
 		RecipientsOnly bool
@@ -147,9 +148,15 @@ func (p Plugin) Exec() error {
 	} else {
 		dialer = gomail.NewDialer(p.Config.Host, p.Config.Port, p.Config.Username, p.Config.Password)
 	}
+
 	if p.Config.SkipVerify {
 		dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	}
+
+	if !p.Config.StartTLS {
+		dialer.StartTLSPolicy = gomail.NoStartTLS
+	}
+
 	dialer.LocalName = p.Config.ClientHostname
 
 	closer, err := dialer.Dial()

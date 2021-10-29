@@ -129,10 +129,10 @@
 			"revisionTime": "2015-07-16T17:19:45Z"
 		},
 		{
-			"checksumSHA1": "iq5WdjScmTU+LfNoerLuwcnXpdM=",
-			"path": "gopkg.in/gomail.v2",
-			"revision": "81ebce5c23dfd25c6c67194b37d3dd3f338c98b1",
-			"revisionTime": "2016-04-11T21:29:32Z"
+			"checksumSHA1": "SoHkt4HLtGvg9wZIDX6BJTqkDgs=",
+			"path": "gopkg.in/mail.v2",
+			"revision": "f59b9b83a4e522098e3d3eb94e6f81850ad6e973",
+			"revisionTime": "2018-11-12T22:01:18Z"
 		},
 		{
 			"checksumSHA1": "12GqsW8PiRPnezDDy0v4brZrndM=",

@@ -1,4 +1,4 @@
-package gomail
+package mail
 
 import (
 	"encoding/base64"
@@ -19,8 +19,8 @@ func (m *Message) WriteTo(w io.Writer) (int64, error) {
 }
 
 func (w *messageWriter) writeMessage(m *Message) {
-	if _, ok := m.header["Mime-Version"]; !ok {
-		w.writeString("Mime-Version: 1.0\r\n")
+	if _, ok := m.header["MIME-Version"]; !ok {
+		w.writeString("MIME-Version: 1.0\r\n")
 	}
 	if _, ok := m.header["Date"]; !ok {
 		w.writeHeader("Date", m.FormatDate(now()))
@@ -28,15 +28,15 @@ func (w *messageWriter) writeMessage(m *Message) {
 	w.writeHeaders(m.header)
 
 	if m.hasMixedPart() {
-		w.openMultipart("mixed")
+		w.openMultipart("mixed", m.boundary)
 	}
 
 	if m.hasRelatedPart() {
-		w.openMultipart("related")
+		w.openMultipart("related", m.boundary)
 	}
 
 	if m.hasAlternativePart() {
-		w.openMultipart("alternative")
+		w.openMultipart("alternative", m.boundary)
 	}
 	for _, part := range m.parts {
 		w.writePart(part, m.charset)
@@ -77,8 +77,11 @@ type messageWriter struct {
 	err        error
 }
 
-func (w *messageWriter) openMultipart(mimeType string) {
+func (w *messageWriter) openMultipart(mimeType, boundary string) {
 	mw := multipart.NewWriter(w)
+	if boundary != "" {
+		mw.SetBoundary(boundary)
+	}
 	contentType := "multipart/" + mimeType + ";\r\n boundary=" + mw.Boundary()
 	w.writers[w.depth] = mw
 
@@ -158,7 +161,11 @@ func (w *messageWriter) Write(p []byte) (int, error) {
 }
 
 func (w *messageWriter) writeString(s string) {
-	n, _ := io.WriteString(w.w, s)
+	if w.err != nil { // do nothing when in error
+		return
+	}
+	var n int
+	n, w.err = io.WriteString(w.w, s)
 	w.n += int64(n)
 }
 
