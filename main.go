@@ -67,9 +67,9 @@ func main() {
 			EnvVar: "PLUGIN_SKIP_VERIFY",
 		},
 		cli.BoolFlag{
-			Name:   "starttls",
+			Name:   "no.starttls",
 			Usage:  "Enable/Disable STARTTLS",
-			EnvVar: "PLUGIN_STARTTLS",
+			EnvVar: "PLUGIN_NO_STARTTLS",
 		},
 		cli.StringFlag{
 			Name:   "recipients.file",
@@ -412,7 +412,7 @@ func run(c *cli.Context) error {
 			Username:       c.String("username"),
 			Password:       c.String("password"),
 			SkipVerify:     c.Bool("skip.verify"),
-			StartTLS:       c.Bool("starttls"),
+			NoStartTLS:     c.Bool("no.starttls"),
 			Recipients:     c.StringSlice("recipients"),
 			RecipientsFile: c.String("recipients.file"),
 			RecipientsOnly: c.Bool("recipients.only"),

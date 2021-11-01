@@ -88,7 +88,7 @@ type (
 		Username       string
 		Password       string
 		SkipVerify     bool
-		StartTLS       bool
+		NoStartTLS     bool
 		Recipients     []string
 		RecipientsFile string
 		RecipientsOnly bool
@@ -153,7 +153,7 @@ func (p Plugin) Exec() error {
 		dialer.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	}
 
-	if !p.Config.StartTLS {
+	if p.Config.NoStartTLS {
 		dialer.StartTLSPolicy = gomail.NoStartTLS
 	}
 
