@@ -203,7 +203,7 @@ func main() {
 		cli.StringFlag{
 			Name:   "commit.author.name",
 			Usage:  "git author name",
-			EnvVar: "DRONE_COMMIT_AUTHOR",
+			EnvVar: "DRONE_COMMIT_AUTHOR,DRONE_COMMIT_AUTHOR_NAME",
 		},
 		cli.StringFlag{
 			Name:   "commit.author.email",
