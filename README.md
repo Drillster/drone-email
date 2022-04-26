@@ -42,8 +42,8 @@ Execute from the working directory:
 
 ```sh
 docker run --rm \
-  -e PLUGIN_FROM_ADDRESS=drone@test.test \
-  -e PLUGIN_FROM_NAME="John Smith" \
+  -e PLUGIN_FROM.ADDRESS=drone@test.test \
+  -e PLUGIN_FROM.NAME="John Smith" \
   -e PLUGIN_HOST=smtp.test.test \
   -e PLUGIN_USERNAME=drone \
   -e PLUGIN_PASSWORD=test \

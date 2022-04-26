@@ -33,12 +33,12 @@ func main() {
 		cli.StringFlag{
 			Name:   "from.address",
 			Usage:  "from address",
-			EnvVar: "PLUGIN_FROM_ADDRESS",
+			EnvVar: "PLUGIN_FROM.ADDRESS",
 		},
 		cli.StringFlag{
 			Name:   "from.name",
 			Usage:  "from name",
-			EnvVar: "PLUGIN_FROM_NAME",
+			EnvVar: "PLUGIN_FROM.NAME",
 		},
 		cli.StringFlag{
 			Name:   "host",
