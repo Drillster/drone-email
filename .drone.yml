@@ -22,6 +22,11 @@ steps:
       from_secret: ORG_MAIL_SMTP_PASSWORD
     Subject:  "PREVIEW: Successul build on {{ commit.branch }} on {{ repo.owner }}/{{ repo.name }}"
 
+trigger:
+  event:
+  - custom
+  - promote
+
 kind: pipeline
 type: exec
 name: build
@@ -30,6 +35,11 @@ steps:
 - name: artificial fail
   commads:
   - bash -c "exit -1"
+
+trigger:
+  event:
+  - custom
+  - promote
 
 kind: pipeline
 type: docker
