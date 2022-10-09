@@ -13,16 +13,12 @@ const (
 
 // DefaultSubject is the default subject template to use for the email
 const DefaultSubject = `
-      {{#success build.status}}
-        Successful build on {{ commit.branch }}
-      {{else}}
-          Failed build on {{ commit.branch }}
-      {{/success}} on {{ repo.owner }}/{{ repo.name }}
+      {{#success build.status}}Successful build on {{ commit.branch }}{{else}}Failed build on {{ commit.branch }}{{/success}} for {{ repo.owner }}/{{ repo.name }}
 `
 
 // DefaultTemplate is the default body template to use for the email
 const DefaultTemplate = `
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta name="viewport" content="width=device-width" />
@@ -77,6 +73,7 @@ const DefaultTemplate = `
 
         .content {
           margin: 5px;
+          margin-bottom: 15px;
         }
 
         .card {
