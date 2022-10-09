@@ -20,9 +20,189 @@ const DefaultSubject = `
 const DefaultTemplate = `
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
+<head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: rgb(30, 30, 30);
+                color: rgb(208, 208, 208);
+            }
+
+            .bg-secondary {
+                background-color: #3e3e3e;
+            }
+
+            .badge {
+                background-color: #505050;
+            }
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: rgb(241, 241, 241);
+                color: black;
+            }
+
+            .bg-secondary {
+                background-color: #ececec;
+                box-shadow: #a5a5a5a5 0px 0px 25px;
+            }
+
+            .badge {
+                background-color: #d2d2d2;
+            }
+        }
+
+        .card {
+            border-radius: 5px;
+            width: calc(100% - 40px);
+        }
+
+        .badge {
+            border-radius: 2px;
+            padding: 3px;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .flex-col {
+            flex-direction: column;
+        }
+
+        .align-start {
+            align-self: flex-start;
+        }
+
+        .items-start {
+            align-items: flex-start;
+        }
+
+        .align-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .m-2 {
+            margin: 15px;
+        }
+	
+        .alert {
+          font-size: 16px;
+          color: #fff;
+          font-weight: 500;
+          padding: 20px;
+          text-align: center;
+          border-radius: 3px;
+        }
+
+        .alert.alert-bad {
+          background: #d0021b;
+        }
+
+        .alert.alert-good {
+          background: #68b90f;
+        }
+
+        td {
+          margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <p>
+      This is the report of your most recent drone pipeline build.
+      It finished {{ datetime build.finished "Mon Jan 2 15:04:05 MST 2006" "Local" }}
+    </p>
+   
+    <!--<img src="https://github.com/JonasBernard/drone-email/raw/master/img/{{build.status}}.png" />-->
+
+   <p>
+       {{#success build.status}}
+        <td class="alert alert-good">
+          Successful build #{{ build.number }}
+        </td>
+      {{else}}
+        <td class="alert alert-bad">
+          Failed build #{{ build.number }}
+        </td>
+      {{/success}}
+   </p>
+    
+    <p>
+        The build was based on the following commit:
+        <div class="bg-secondary card m-2 flex flex-col">
+            <div class="flex justify-between items-start m-2">
+                <strong><a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a></strong>
+                <small class="badge">{{commit.branch}}</small>
+            </div>
+            <div class="flex align-center m-2">
+                <img class="align-start m-2" src="{{commit.author.avatar}}" style="border-radius: 50%;" width="30px" height="30px" alt="Avatar of {{commit.author.name}}">
+                <div class="flex flex-col">
+                    <strong>{{commit.author.name}}</strong>
+                    {{commit.author.email}}
+                </div>
+            </div>
+        </div>
+    </p>
+    
+    <ul>
+        <li>See the build on drone: <a href="{{build.link}}">Build #{{build.number}}, {{build.status}}</a></li>
+        <li>See the commit on GitHub: <a href="{{commit.link}}">{{commit.message}}</a></li>
+        <li>See the repository on GitHub: <a href="{{repo.link}}">{{repo.fullName}}</a></li>
+    </ul>
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+      <td>
+	See the build on drone::
+      </td>
+      <td>
+	<a href="{{build.link}}">Build #{{build.number}}, {{build.status}}</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	Link to the commit:
+      </td>
+      <td>
+	<a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	Link to the repository:
+      </td>
+      <td>
+	<a href="{{repo.link}}">{{repo.fullName}}</a>
+      </td>
+    </tr>
+    <tr>
+      <td>
+	Commit:
+      </td>
+      <td>
+	{{ truncate commit.sha 8 }}
+      </td>
+    </tr>
+    <tr>
+      <td>
+	Started at:
+      </td>
+      <td>
+	{{ datetime build.created "Mon Jan 2 15:04:05 MST 2006" "Local" }}
+      </td>
+    </tr>
+  </table>
+</body>
+
+  <head>
+    
     <style>
       * {
         margin: 0;
@@ -183,88 +363,5 @@ const DefaultTemplate = `
       }
     </style>
   </head>
-  <body>
-    <table class="body-wrap">
-      <tr>
-        <td></td>
-        <td class="container" width="600">
-          <div class="content">
-            <table class="main" width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                {{#success build.status}}
-                  <td class="alert alert-good">
-                    <a href="{{ build.link }}">
-                      Successful build #{{ build.number }}
-                    </a>
-                  </td>
-                {{else}}
-                  <td class="alert alert-bad">
-                    <a href="{{ build.link }}">
-                      Failed build #{{ build.number }}
-                    </a>
-                  </td>
-                {{/success}}
-              </tr>
-              <tr>
-                <td class="content-wrap">
-                  <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td>
-                        Repo:
-                      </td>
-                      <td>
-                        {{ repo.owner }}/{{ repo.name }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Author:
-                      </td>
-                      <td>
-                        {{ commit.author.name }} ({{ commit.author.email }})
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Branch:
-                      </td>
-                      <td>
-                        {{ commit.branch }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Commit:
-                      </td>
-                      <td>
-                        {{ truncate commit.sha 8 }}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        Started at:
-                      </td>
-                      <td>
-                        {{ datetime build.created "Mon Jan 2 15:04:05 MST 2006" "Local" }}
-                      </td>
-                    </tr>
-                  </table>
-                  <hr>
-                  <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td>
-                        {{ commit.message }}
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </td>
-        <td></td>
-      </tr>
-    </table>
-  </body>
 </html>
 `
