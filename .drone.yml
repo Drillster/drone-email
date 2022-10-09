@@ -22,11 +22,20 @@ steps:
       from_secret: ORG_MAIL_SMTP_PASSWORD
     Subject:  "PREVIEW: Successul build on {{ commit.branch }} on {{ repo.owner }}/{{ repo.name }}"
 
+kind: pipeline
+type: exec
+name: build
+
+steps:
 - name: artificial fail
-  image: node
   commads:
   - bash -c "exit -1"
 
+kind: pipeline
+type: docker
+name: build
+
+steps:
 - name: send preview failure mail
   image: jonasbernard/drone-email
   when:
