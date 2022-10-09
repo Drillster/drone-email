@@ -75,9 +75,13 @@ const DefaultTemplate = `
             }
         }
 
+        .content {
+          margin: 5px;
+        }
+
         .card {
             border-radius: 5px;
-            width: calc(100% - 40px);
+            width: calc(100% - 30px);
         }
 
         .badge {
@@ -141,76 +145,77 @@ const DefaultTemplate = `
     </style>
 </head>
 <body>
-    <p>
-      This is the report of your most recent drone pipeline build.
-      It finished {{ datetime build.finished "Mon Jan 2 15:04:05 MST 2006" "Local" }}.
-    </p>
-   
-    <!--<img src="https://github.com/JonasBernard/drone-email/raw/master/img/{{build.status}}.png" />-->
-
-   <p>
-       {{#success build.status}}
-        <div class="m-2 alert alert-good flex justify-center">
-          <span>Successful build #{{ build.number }}</span>
-        </div>
-      {{else}}
-        <div class="m-2 alert alert-bad flex justify-center">
-          <span>Failed build #{{ build.number }}</span>
-        </div>
-      {{/success}}
-   </p>
-    
-    <p>
-        The build was based on the following commit:
-        <div class="bg-secondary card m-2 flex flex-col">
-            <div class="flex justify-between items-start m-2">
-                <strong><a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a></strong>
-                <small class="badge">{{commit.branch}}</small>
-            </div>
-            <div class="flex align-center m-2">
-                <img class="align-start m-2" src="{{commit.author.avatar}}" style="border-radius: 50%;" width="30px" height="30px" alt="Avatar of {{commit.author.name}}">
-                <div class="flex flex-col">
-                    <strong>{{commit.author.name}}</strong>
-                    {{commit.author.email}}
-                </div>
-            </div>
-        </div>
-    </p>
-    
-    <table width="100%" cellpadding="0" cellspacing="0">
-    <tr>
-      <td>
-	      See the build on drone:
-      </td>
-      <td>
-	<a href="{{build.link}}">Build #{{build.number}}, {{build.status}}</a>
-      </td>
-    </tr>
-    <tr>
-      <td>
-	Link to the commit:
-      </td>
-      <td>
-	<a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a>
-      </td>
-    </tr>
-    <tr>
-      <td>
-	Link to the repository:
-      </td>
-      <td>
-	<a href="{{repo.link}}">{{repo.fullName}}</a>
-      </td>
-    </tr>
-    <tr>
-      <td>
-	Started at:
-      </td>
-      <td>
-	{{ datetime build.created "Mon Jan 2 15:04:05 MST 2006" "Local" }}
-      </td>
-    </tr>
-  </table>
+    <div class="content">
+      <p>
+        This is the report of your most recent drone pipeline build.
+        It finished {{ datetime build.finished "Mon Jan 2 15:04:05 MST 2006" "Local" }}.
+      </p>
+      <!--<img src="https://github.com/JonasBernard/drone-email/raw/master/img/{{build.status}}.png" />-->
+      
+         <p>
+         {{#success build.status}}
+          <div class="m-2 alert alert-good flex justify-center">
+            <span>Successful build #{{ build.number }}</span>
+          </div>
+        {{else}}
+          <div class="m-2 alert alert-bad flex justify-center">
+            <span>Failed build #{{ build.number }}</span>
+          </div>
+        {{/success}}
+         </p>
+      
+      <p>
+          The build was based on the following commit:
+          <div class="bg-secondary card m-2 flex flex-col">
+              <div class="flex justify-between items-start m-2">
+                  <strong><a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a></strong>
+                  <small class="badge">{{commit.branch}}</small>
+              </div>
+              <div class="flex align-center m-2">
+                  <img class="align-start m-2" src="{{commit.author.avatar}}" style="border-radius: 50%;" width="30px" height="30px" alt="Avatar of {{commit.author.name}}">
+                  <div class="flex flex-col">
+                      <strong>{{commit.author.name}}</strong>
+                      {{commit.author.email}}
+                  </div>
+              </div>
+          </div>
+      </p>
+      
+      <table width="100%" cellpadding="0" cellspacing="0">
+      <tr>
+        <td>
+              See the build on drone:
+        </td>
+        <td>
+        <a href="{{build.link}}">Build #{{build.number}}, {{build.status}}</a>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Link to the commit:
+        </td>
+        <td>
+        <a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Link to the repository:
+        </td>
+        <td>
+        <a href="{{repo.link}}">{{repo.fullName}}</a>
+        </td>
+      </tr>
+      <tr>
+        <td>
+        Started at:
+        </td>
+        <td>
+        {{ datetime build.created "Mon Jan 2 15:04:05 MST 2006" "Local" }}
+        </td>
+      </tr>
+        </table>
+    </div>
 </body>
 </html>
 `
