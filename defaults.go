@@ -13,7 +13,11 @@ const (
 
 // DefaultSubject is the default subject template to use for the email
 const DefaultSubject = `
-[{{ build.status }}] {{ repo.owner }}/{{ repo.name }} ({{ commit.branch }} - {{ truncate commit.sha 8 }})
+      {{#success build.status}}
+        Successful build on {{ commit.branch }}
+      {{else}}
+          Failed build on {{ commit.branch }}
+      {{/success}} on {{ repo.owner }}/{{ repo.name }}
 `
 
 // DefaultTemplate is the default body template to use for the email
@@ -37,6 +41,7 @@ const DefaultTemplate = `
           width: 100% !important;
           height: 100%;
           line-height: 1.6;
+          padding-bottom: 20px;
         }
 
         @media (prefers-color-scheme: light) {
@@ -104,11 +109,16 @@ const DefaultTemplate = `
             justify-content: space-between;
         }
 
+        .justify-center {
+            justify-content: center;
+        }
+
         .m-2 {
             margin: 15px;
         }
 	
         .alert {
+          width: calc(100% - 30px);
           font-size: 16px;
           color: #fff;
           font-weight: 500;
@@ -140,13 +150,13 @@ const DefaultTemplate = `
 
    <p>
        {{#success build.status}}
-        <td class="alert alert-good">
-          Successful build #{{ build.number }}
-        </td>
+        <div class="m-2 alert alert-good flex justify-center">
+          <span>Successful build #{{ build.number }}</span>
+        </div>
       {{else}}
-        <td class="alert alert-bad">
-          Failed build #{{ build.number }}
-        </td>
+        <div class="m-2 alert alert-bad flex justify-center">
+          <span>Failed build #{{ build.number }}</span>
+        </div>
       {{/success}}
    </p>
     
