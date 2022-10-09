@@ -1,5 +1,7 @@
 # drone-email
 
+### This is a fork from [drillster/drone-email](https://github.com/Drillster/drone-email). The only change I made is that the default mail template looks different.
+
 [![Go Doc](https://godoc.org/github.com/Drillster/drone-email?status.svg)](http://godoc.org/github.com/Drillster/drone-email)
 [![Go Report](https://goreportcard.com/badge/github.com/Drillster/drone-email)](https://goreportcard.com/report/github.com/Drillster/drone-email)
 
