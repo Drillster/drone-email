@@ -40,7 +40,7 @@ const DefaultTemplate = `
           padding-bottom: 20px;
         }
 
-        @media (prefers-color-scheme: light) {
+        @media (prefers-color-scheme: dark) {
             body {
                 background-color: rgb(30, 30, 30);
                 color: rgb(208, 208, 208);
@@ -55,7 +55,7 @@ const DefaultTemplate = `
             }
         }
 
-        @media (prefers-color-scheme: dark) {
+        @media (prefers-color-scheme: light) {
             body {
                 background-color: rgb(241, 241, 241);
                 color: black;
