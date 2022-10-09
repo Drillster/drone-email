@@ -5,8 +5,8 @@
 <img src="img/screenshot_light.jpg" alt="Screenshot of light mail" width="250px"></img>
 <img src="img/screenshot_dark.jpg" alt="Screenshot of dark mail" width="250px"></img>
 
-[![Go Doc](https://godoc.org/github.com/Drillster/drone-email?status.svg)](http://godoc.org/github.com/Drillster/drone-email)
-[![Go Report](https://goreportcard.com/badge/github.com/Drillster/drone-email)](https://goreportcard.com/report/github.com/Drillster/drone-email)
+[![Go Doc](https://godoc.org/github.com/Drillster/drone-email?status.svg)](http://godoc.org/github.com/JonasBernard/drone-email)
+[![Go Report](https://goreportcard.com/badge/github.com/Drillster/drone-email)](https://goreportcard.com/report/github.com/JonasBernard/drone-email)
 
 Drone plugin to send build status notifications via Email. For the usage information and a listing of the available options please take a look at [the docs](DOCS.md).
 
