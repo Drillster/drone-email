@@ -24,7 +24,7 @@ steps:
 
 - name: artificial fail
   image: alpine
-  commads:
+  commands:
   - bash -c "exit -1"
 
 - name: send preview failure mail
