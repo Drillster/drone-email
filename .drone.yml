@@ -3,14 +3,34 @@ type: docker
 name: mail preview
 
 steps:
-- name: send preview mail
+- name: send preview success mail
   image: jonasbernard/drone-email
   when:
-    event:
-    - promote
-    - custom
+  settings:
+    from.address:
+      from_secret: ORG_MAIL_FROM_ADDRESS
+    from.name:
+      from_secret: ORG_MAIL_FROM_NAME
+    host: 
+      from_secret: ORG_MAIL_SMTP_SERVER
+    recipients_only: true
+    recipients:
+      from_secret: ORG_MAIL_RECIPIENTS
+    username:
+      from_secret: ORG_MAIL_SMTP_USERNAME
+    password:
+      from_secret: ORG_MAIL_SMTP_PASSWORD
+    Subject:  "PREVIEW: Successul build on {{ commit.branch }} on {{ repo.owner }}/{{ repo.name }}"
+
+- name: artificial fail
+  image: node
+  commads:
+  - bash -c "exit -1"
+
+- name: send preview failure mail
+  image: jonasbernard/drone-email
+  when:
     status:
-    - success
     - failure
   settings:
     from.address:
@@ -26,6 +46,7 @@ steps:
       from_secret: ORG_MAIL_SMTP_USERNAME
     password:
       from_secret: ORG_MAIL_SMTP_PASSWORD
+    Subject: "PREVIEW: Failed build on {{ commit.branch }} on {{ repo.owner }}/{{ repo.name }}"
 
 trigger:
   event:
