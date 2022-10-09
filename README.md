@@ -4,6 +4,7 @@
 
 <img src="img/screenshot_light.jpg" alt="Screenshot of light mail" width="250px"></img>
 <img src="img/screenshot_dark.jpg" alt="Screenshot of dark mail" width="250px"></img>
+
 It supports dark mode!
 
 [![Go Doc](https://godoc.org/github.com/Drillster/drone-email?status.svg)](http://godoc.org/github.com/Drillster/drone-email)
