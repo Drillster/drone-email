@@ -53,6 +53,10 @@ const DefaultTemplate = `
             .badge {
                 background-color: #505050;
             }
+
+            a {
+              color: rgb(94, 172, 244);
+            }
         }
 
         @media (prefers-color-scheme: light) {
