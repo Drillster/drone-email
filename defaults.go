@@ -162,13 +162,6 @@ const DefaultTemplate = `
     </style>
 </head>
 <body>
-    {{#success build.status}}
-    <div class="confetti">
-        <img src="https://github.com/JonasBernard/drone-email/raw/master/img/confetti-transparent.gif" alt="" width="100%" height="100%">
-    </div>
-    {{else}}
-
-    {{/success}}
     <div class="content">
       <p>
         This is the report of your most recent drone pipeline build.
@@ -240,6 +233,13 @@ const DefaultTemplate = `
       </tr>
         </table>
     </div>
+    {{#success build.status}}
+    <div class="confetti">
+        <img src="https://github.com/JonasBernard/drone-email/raw/master/img/confetti-transparent.gif" alt="" width="100%" height="100%">
+    </div>
+    {{else}}
+
+    {{/success}}
 </body>
 </html>
 `
