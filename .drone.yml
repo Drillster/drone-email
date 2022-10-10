@@ -10,7 +10,7 @@ steps:
   commands:
   - echo $DOCKER_PASSWORD | docker login --username jonasbernard --password-stdin
   - docker build -t jonasbernard/drone-email .
-  - docker publish jonasbernard/drone-email:latest
+  - docker push jonasbernard/drone-email:latest
   - docker logout
 
 trigger:
