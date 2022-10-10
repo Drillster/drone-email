@@ -2,7 +2,33 @@ kind: pipeline
 type: docker
 name: mail preview
 
+services:
+- name: docker
+  image: docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
+
+volumes:
+  - name: dockersock
+    temp: {}
+
 steps:
+- name: build docker image and publish
+  image: docker:dind
+  volumes:
+  - name: dockersock
+    path: /var/run
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: ORG_DOCKER_PASSWORD
+  commands:
+  - sleep 5 # give docker enough time to start
+  - echo $DOCKER_PASSWORD | docker login --username jonasbernard --password-stdin
+  - docker build -t jonasbernard/drone-email .
+  - docker publish jonasbernard/drone-email:latest
+
 - name: send preview success mail
   image: jonasbernard/drone-email
   when:
@@ -52,3 +78,4 @@ trigger:
   event:
   - custom
   - promote
+  - push
