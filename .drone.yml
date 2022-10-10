@@ -19,6 +19,7 @@ trigger:
   - promote
   - push
 
+---
 kind: pipeline
 type: docker
 name: mail preview
@@ -74,3 +75,6 @@ trigger:
   - custom
   - promote
   - push
+
+depends_on:
+- publish docker image
