@@ -38,6 +38,12 @@ const DefaultTemplate = `
           height: 100%;
           line-height: 1.6;
           padding-bottom: 20px;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          padding: 0;
+          margin: 0;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -143,9 +149,26 @@ const DefaultTemplate = `
         td {
           margin-right: 5px;
         }
+
+        .confetti {
+            position: absolute;
+            width: 100%;
+            max-height: 100%;
+            left: 0;
+            right: 0;
+            top: 0;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body>
+    {{#success build.status}}
+    <div class="confetti">
+        <img src="https://github.com/JonasBernard/drone-email/raw/master/img/confetti-transparent.gif" alt="" width="100%" height="100%">
+    </div>
+    {{else}}
+
+    {{/success}}
     <div class="content">
       <p>
         This is the report of your most recent drone pipeline build.
