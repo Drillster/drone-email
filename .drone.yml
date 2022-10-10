@@ -23,6 +23,7 @@ kind: pipeline
 type: docker
 name: mail preview
 
+steps:
 - name: send preview success mail
   image: jonasbernard/drone-email
   when:
