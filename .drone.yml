@@ -1,18 +1,27 @@
 kind: pipeline
-type: docker
-name: mail preview
+type: exec
+name: publish docker image
 
 steps:
-# - name: build docker image and publish
-#  image: docker
-#  environment:
-#    DOCKER_PASSWORD:
-#      from_secret: ORG_DOCKER_PASSWORD
-#  commands:
-#  - sleep 5 # give docker enough time to start
-#  - echo $DOCKER_PASSWORD | docker login --username jonasbernard --password-stdin
-#  - docker build -t jonasbernard/drone-email .
-#  - docker publish jonasbernard/drone-email:latest
+- name: build docker image and publish
+  environment:
+    DOCKER_PASSWORD:
+      from_secret: ORG_DOCKER_PASSWORD
+  commands:
+  - echo $DOCKER_PASSWORD | docker login --username jonasbernard --password-stdin
+  - docker build -t jonasbernard/drone-email .
+  - docker publish jonasbernard/drone-email:latest
+  - docker logout
+
+trigger:
+  event:
+  - custom
+  - promote
+  - push
+
+kind: pipeline
+type: docker
+name: mail preview
 
 - name: send preview success mail
   image: jonasbernard/drone-email
