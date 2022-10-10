@@ -151,7 +151,7 @@ const DefaultTemplate = `
         }
 
         .confetti {
-            position: absolute;
+            position: fixed;
             width: 100%;
             max-height: 100%;
             left: 0;
