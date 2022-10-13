@@ -1,7 +1,20 @@
 # drone-email
 
-[![Go Doc](https://godoc.org/github.com/Drillster/drone-email?status.svg)](http://godoc.org/github.com/Drillster/drone-email)
-[![Go Report](https://goreportcard.com/badge/github.com/Drillster/drone-email)](https://goreportcard.com/report/github.com/Drillster/drone-email)
+### This is a fork from [drillster/drone-email](https://github.com/Drillster/drone-email). The only change I made is that the default mail template looks different. It has clickable links, some more information and supports dark mode. Here is how it looks:
+
+<img src="img/screenshot_light.jpg" alt="Screenshot of light mail" width="250px"></img>
+<img src="img/screenshot_dark.jpg" alt="Screenshot of dark mail" width="250px"></img>
+
+### Confetti animation:
+
+The mail even has some animated confetti. It is tested to work on
+- Spark Android Mail Client
+- Thunderbird Mail Client
+
+<img src="img/screenshot_dark_confetti.jpg" alt="Screenshot of dark mail" width="150px"></img>
+
+[![Go Doc](https://godoc.org/github.com/Drillster/drone-email?status.svg)](http://godoc.org/github.com/JonasBernard/drone-email)
+[![Go Report](https://goreportcard.com/badge/github.com/Drillster/drone-email)](https://goreportcard.com/report/github.com/JonasBernard/drone-email)
 
 Drone plugin to send build status notifications via Email. For the usage information and a listing of the available options please take a look at [the docs](DOCS.md).
 
