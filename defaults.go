@@ -149,26 +149,6 @@ const DefaultTemplate = `
         td {
           margin-right: 5px;
         }
-
-        .confetti {
-            width: 0;
-            height: 0;
-        }
-
-        .confetti::before {
-            content: '';
-            position: absolute;
-            top: 0;
-
-            background-image: url(https://github.com/JonasBernard/drone-email/raw/master/img/confetti-transparent.gif);
-            background-repeat: no-repeat;
-            background-size: contain;
-
-            width: 100vw;
-            height: 100vw;
-
-            pointer-events: none;
-        }
     </style>
 </head>
 <body>
@@ -243,11 +223,6 @@ const DefaultTemplate = `
       </tr>
         </table>
     </div>
-    {{#success build.status}}
-    <div class="confetti"></div>
-    {{else}}
-
-    {{/success}}
 </body>
 </html>
 `
