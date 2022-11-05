@@ -5,6 +5,16 @@
 
 Drone plugin to send build status notifications via Email. For the usage information and a listing of the available options please take a look at [the docs](DOCS.md).
 
+Screenshots from Spark for Android:
+
+<img src="img/screenshot_light.jpg" alt="Screenshot of light mail on mobile" width="320px"></img>
+<img src="img/screenshot_dark.jpg" alt="Screenshot of dark mail on moblie" width="320px"></img>
+
+Screenshots from Thunderbird for Linux:
+
+<img src="img/screenshot_thunderbird_light.png" alt="Screenshot of light mail in thunderbird" width="640px"></img>
+<img src="img/screenshot_thunderbird_dark.png" alt="Screenshot of dark mail in thunderbird" width="640px"></img>
+
 ## Binary
 
 Build the binary with the following command:

@@ -13,258 +13,240 @@ const (
 
 // DefaultSubject is the default subject template to use for the email
 const DefaultSubject = `
-[{{ build.status }}] {{ repo.owner }}/{{ repo.name }} ({{ commit.branch }} - {{ truncate commit.sha 8 }})
+      {{#success build.status}}Successful build on {{ commit.branch }}{{else}}Failed build on {{ commit.branch }}{{/success}} for {{ repo.owner }}/{{ repo.name }}
 `
 
 // DefaultTemplate is the default body template to use for the email
 const DefaultTemplate = `
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
+
+<head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="color-scheme" content="dark light">
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-        box-sizing: border-box;
-        font-size: 14px;
-      }
-      body {
-        -webkit-font-smoothing: antialiased;
-        -webkit-text-size-adjust: none;
-        width: 100% !important;
-        height: 100%;
-        line-height: 1.6;
-        background-color: #f6f6f6;
-      }
-      table td {
-        vertical-align: top;
-      }
-      .body-wrap {
-        background-color: #f6f6f6;
-        width: 100%;
-      }
-      .container {
-        display: block !important;
-        max-width: 600px !important;
-        margin: 0 auto !important;
-        /* makes it centered */
-        clear: both !important;
-      }
-      .content {
-        max-width: 600px;
-        margin: 0 auto;
-        display: block;
-        padding: 20px;
-      }
-      .main {
-        background: #fff;
-        border: 1px solid #e9e9e9;
-        border-radius: 3px;
-      }
-      .content-wrap {
-        padding: 20px;
-      }
-      .content-block {
-        padding: 0 0 20px;
-      }
-      .header {
-        width: 100%;
-        margin-bottom: 20px;
-      }
-      h1, h2, h3 {
-        font-family: "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-        color: #000;
-        margin: 40px 0 0;
-        line-height: 1.2;
-        font-weight: 400;
-      }
-      h1 {
-        font-size: 32px;
-        font-weight: 500;
-      }
-      h2 {
-        font-size: 24px;
-      }
-      h3 {
-        font-size: 18px;
-      }
-      hr {
-        border: 1px solid #e9e9e9;
-        margin: 20px 0;
-        height: 1px;
-        padding: 0;
-      }
-      p,
-      ul,
-      ol {
-        margin-bottom: 10px;
-        font-weight: normal;
-      }
-      p li,
-      ul li,
-      ol li {
-        margin-left: 5px;
-        list-style-position: inside;
-      }
-      a {
-        color: #348eda;
-        text-decoration: underline;
-      }
-      .last {
-        margin-bottom: 0;
-      }
-      .first {
-        margin-top: 0;
-      }
-      .padding {
-        padding: 10px 0;
-      }
-      .aligncenter {
-        text-align: center;
-      }
-      .alignright {
-        text-align: right;
-      }
-      .alignleft {
-        text-align: left;
-      }
-      .clear {
-        clear: both;
-      }
-      .alert {
-        font-size: 16px;
-        color: #fff;
-        font-weight: 500;
-        padding: 20px;
-        text-align: center;
-        border-radius: 3px 3px 0 0;
-      }
-      .alert a {
-        color: #fff;
-        text-decoration: none;
-        font-weight: 500;
-        font-size: 16px;
-      }
-      .alert.alert-warning {
-        background: #ff9f00;
-      }
-      .alert.alert-bad {
-        background: #d0021b;
-      }
-      .alert.alert-good {
-        background: #68b90f;
-      }
-      @media only screen and (max-width: 640px) {
-        h1,
-        h2,
-        h3 {
-          font-weight: 600 !important;
-          margin: 20px 0 5px !important;
+        * {
+            font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+            box-sizing: border-box;
+            font-size: 14px;
         }
-        h1 {
-          font-size: 22px !important;
+
+        body {
+            width: 100% !important;
+            height: 100%;
+            line-height: 1.6;
+            padding-bottom: 20px;
+            padding: 0;
+            margin: 0;
+
+            /* Not working in GMail */
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: none;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
-        h2 {
-          font-size: 18px !important;
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: rgb(30, 30, 30);
+                color: rgb(208, 208, 208);
+            }
+
+            .bg-secondary {
+                background-color: #262626;
+            }
+
+            .badge {
+                background-color: #393939;
+            }
+
+            a {
+                color: rgb(94, 172, 244);
+            }
+
+            .card-header {
+                background-color: #343434;
+            }
         }
-        h3 {
-          font-size: 16px !important;
+
+        @media (prefers-color-scheme: light) {
+            body {
+                background-color: rgb(241, 241, 241);
+                color: black;
+            }
+
+            .bg-secondary {
+                background-color: #ececec;
+
+                /* Not working in GMail */
+                box-shadow: #a5a5a5a5 0px 0px 25px;
+            }
+
+            .badge {
+                background-color: #d2d2d2;
+            }
+
+            .card-header {
+                background-color: #240e62;
+            }
         }
-        .container {
-          width: 100% !important;
+
+        .content {
+            margin: 5px;
+            margin-bottom: 15px;
+            padding: 15px;
         }
-        .content,
-        .content-wrapper {
-          padding: 10px !important;
+
+        .card {
+            border-radius: 5px;
+            width: 100%;
+            margin: 15px 0px;
         }
-      }
+
+        .card-header {
+            border-radius: 5px 5px 0px 0px;
+            padding: 5px 10px;
+            color: white;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .badge {
+            border-radius: 2px;
+            padding: 3px;
+        }
+
+        .m-2 {
+            margin: 15px;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .alert {
+            width: 100%;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 500;
+            padding: 20px 0px;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .alert.alert-bad {
+            background-color: #d0021b;
+        }
+
+        .alert.alert-good {
+            background-color: #68b90f;
+        }
+
+        td {
+            margin-right: 5px;
+        }
     </style>
-  </head>
-  <body>
-    <table class="body-wrap">
-      <tr>
-        <td></td>
-        <td class="container" width="600">
-          <div class="content">
-            <table class="main" width="100%" cellpadding="0" cellspacing="0">
-              <tr>
-                {{#success build.status}}
-                  <td class="alert alert-good">
-                    <a href="{{ build.link }}">
-                      Successful build #{{ build.number }}
-                    </a>
-                  </td>
-                {{else}}
-                  <td class="alert alert-bad">
-                    <a href="{{ build.link }}">
-                      Failed build #{{ build.number }}
-                    </a>
-                  </td>
-                {{/success}}
-              </tr>
-              <tr>
-                <td class="content-wrap">
-                  <table width="100%" cellpadding="0" cellspacing="0">
+</head>
+
+<body>
+    <div class="content">
+        <p style="margin-top: 0;">
+            This is the report of your most recent drone pipeline build.
+            It finished {{ datetime build.finished "Mon Jan 2 15:04:05 MST 2006" "Local" }}.
+        </p>
+
+        <p>
+            {{#success build.status}}
+             <div class="alert alert-good">
+               <span>Successful build #{{ build.number }}</span>
+             </div>
+           {{else}}
+             <div class="alert alert-bad">
+               <span>Failed build #{{ build.number }}</span>
+             </div>
+           {{/success}}
+        </p>
+
+        <p>
+        <div class="bg-secondary card">
+            <div class="card-header">
+                The build was based on the following commit:
+            </div>
+            <div class="card-body">
+                <table class="w-full" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td><strong><a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a></strong></td>
+                            <td style="text-align: right;"><small class="badge">{{commit.branch}}</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="w-full" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="width: 35px"><img class="m-2" src="{{commit.author.avatar}}" style="border-radius: 50%;"
+                                    width="40px" height="40px" alt="Avatar of {{commit.author.name}}"></td>
+                            <td>
+                                <div>
+                                    <strong>{{commit.author.name}}</strong><br>
+                                    {{commit.author.email}}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </p>
+
+        <div class="bg-secondary card">
+            <div class="card-header">
+                Here are some useful links:
+            </div>
+            <div class="card-body">
+                <table class="w-full" cellpadding="0" cellspacing="0">
                     <tr>
-                      <td>
-                        Repo:
-                      </td>
-                      <td>
-                        {{ repo.owner }}/{{ repo.name }}
-                      </td>
+                        <td>
+                            See the build on drone:
+                        </td>
+                        <td>
+                            <a href="{{build.link}}">Build #{{build.number}}, {{build.status}}</a>
+                        </td>
                     </tr>
                     <tr>
-                      <td>
-                        Author:
-                      </td>
-                      <td>
-                        {{ commit.author.name }} ({{ commit.author.email }})
-                      </td>
+                        <td>
+                            Link to the commit:
+                        </td>
+                        <td>
+                            <a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a>
+                        </td>
                     </tr>
                     <tr>
-                      <td>
-                        Branch:
-                      </td>
-                      <td>
-                        {{ commit.branch }}
-                      </td>
+                        <td>
+                            Link to the repository:
+                        </td>
+                        <td>
+                            <a href="{{repo.link}}">{{repo.fullName}}</a>
+                        </td>
                     </tr>
                     <tr>
-                      <td>
-                        Commit:
-                      </td>
-                      <td>
-                        {{ truncate commit.sha 8 }}
-                      </td>
+                        <td>
+                            Started at:
+                        </td>
+                        <td>
+                            {{ datetime build.created "Mon Jan 2 15:04:05 MST 2006" "Local" }}
+                        </td>
                     </tr>
-                    <tr>
-                      <td>
-                        Started at:
-                      </td>
-                      <td>
-                        {{ datetime build.created "Mon Jan 2 15:04:05 MST 2006" "Local" }}
-                      </td>
-                    </tr>
-                  </table>
-                  <hr>
-                  <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                      <td>
-                        {{ commit.message }}
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </div>
-        </td>
-        <td></td>
-      </tr>
-    </table>
-  </body>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
 </html>
 `
