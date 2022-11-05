@@ -20,30 +20,33 @@ const DefaultSubject = `
 const DefaultTemplate = `
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="color-scheme" content="dark light">
     <style>
         * {
-          font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
-          box-sizing: border-box;
-          font-size: 14px;
+            font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+            box-sizing: border-box;
+            font-size: 14px;
         }
 
         body {
-          -webkit-font-smoothing: antialiased;
-          -webkit-text-size-adjust: none;
-          width: 100% !important;
-          height: 100%;
-          line-height: 1.6;
-          padding-bottom: 20px;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          padding: 0;
-          margin: 0;
+            width: 100% !important;
+            height: 100%;
+            line-height: 1.6;
+            padding-bottom: 20px;
+            padding: 0;
+            margin: 0;
+
+            /* Not working in GMail */
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-size-adjust: none;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
         }
 
         @media (prefers-color-scheme: dark) {
@@ -53,15 +56,19 @@ const DefaultTemplate = `
             }
 
             .bg-secondary {
-                background-color: #3e3e3e;
+                background-color: #262626;
             }
 
             .badge {
-                background-color: #505050;
+                background-color: #393939;
             }
 
             a {
-              color: rgb(94, 172, 244);
+                color: rgb(94, 172, 244);
+            }
+
+            .card-header {
+                background-color: #343434;
             }
         }
 
@@ -73,22 +80,40 @@ const DefaultTemplate = `
 
             .bg-secondary {
                 background-color: #ececec;
+
+                /* Not working in GMail */
                 box-shadow: #a5a5a5a5 0px 0px 25px;
             }
 
             .badge {
                 background-color: #d2d2d2;
             }
+
+            .card-header {
+                background-color: #240e62;
+            }
         }
 
         .content {
-          margin: 5px;
-          margin-bottom: 15px;
+            margin: 5px;
+            margin-bottom: 15px;
+            padding: 15px;
         }
 
         .card {
             border-radius: 5px;
-            width: calc(100% - 30px);
+            width: 100%;
+            margin: 15px 0px;
+        }
+
+        .card-header {
+            border-radius: 5px 5px 0px 0px;
+            padding: 5px 10px;
+            color: white;
+        }
+
+        .card-body {
+            padding: 10px;
         }
 
         .badge {
@@ -96,133 +121,132 @@ const DefaultTemplate = `
             padding: 3px;
         }
 
-        .flex {
-            display: flex;
-        }
-
-        .flex-col {
-            flex-direction: column;
-        }
-
-        .align-start {
-            align-self: flex-start;
-        }
-
-        .items-start {
-            align-items: flex-start;
-        }
-
-        .align-center {
-            align-items: center;
-        }
-
-        .justify-between {
-            justify-content: space-between;
-        }
-
-        .justify-center {
-            justify-content: center;
-        }
-
         .m-2 {
             margin: 15px;
         }
-	
+
+        .w-full {
+            width: 100%;
+        }
+
         .alert {
-          width: calc(100% - 30px);
-          font-size: 16px;
-          color: #fff;
-          font-weight: 500;
-          padding: 20px;
-          text-align: center;
-          border-radius: 3px;
+            width: 100%;
+            font-size: 16px;
+            color: #fff;
+            font-weight: 500;
+            padding: 20px 0px;
+            text-align: center;
+            border-radius: 5px;
         }
 
         .alert.alert-bad {
-          background-color: #d0021b;
+            background-color: #d0021b;
         }
 
         .alert.alert-good {
-          background-color: #68b90f;
+            background-color: #68b90f;
         }
 
         td {
-          margin-right: 5px;
+            margin-right: 5px;
         }
     </style>
 </head>
+
 <body>
     <div class="content">
-      <p>
-        This is the report of your most recent drone pipeline build.
-        It finished {{ datetime build.finished "Mon Jan 2 15:04:05 MST 2006" "Local" }}.
-      </p>
-      <!--<img src="https://github.com/JonasBernard/drone-email/raw/master/img/{{build.status}}.png" />-->
-      
-         <p>
-         {{#success build.status}}
-          <div class="m-2 alert alert-good flex justify-center">
-            <span>Successful build #{{ build.number }}</span>
-          </div>
-        {{else}}
-          <div class="m-2 alert alert-bad flex justify-center">
-            <span>Failed build #{{ build.number }}</span>
-          </div>
-        {{/success}}
-         </p>
-      
-      <p>
-          The build was based on the following commit:
-          <div class="bg-secondary card m-2 flex flex-col">
-              <div class="flex justify-between items-start m-2">
-                  <strong><a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a></strong>
-                  <small class="badge">{{commit.branch}}</small>
-              </div>
-              <div class="flex align-center m-2">
-                  <img class="align-start m-2" src="{{commit.author.avatar}}" style="border-radius: 50%;" width="30px" height="30px" alt="Avatar of {{commit.author.name}}">
-                  <div class="flex flex-col">
-                      <strong>{{commit.author.name}}</strong>
-                      {{commit.author.email}}
-                  </div>
-              </div>
-          </div>
-      </p>
-      
-      <table width="100%" cellpadding="0" cellspacing="0">
-      <tr>
-        <td>
-              See the build on drone:
-        </td>
-        <td>
-        <a href="{{build.link}}">Build #{{build.number}}, {{build.status}}</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Link to the commit:
-        </td>
-        <td>
-        <a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Link to the repository:
-        </td>
-        <td>
-        <a href="{{repo.link}}">{{repo.fullName}}</a>
-        </td>
-      </tr>
-      <tr>
-        <td>
-        Started at:
-        </td>
-        <td>
-        {{ datetime build.created "Mon Jan 2 15:04:05 MST 2006" "Local" }}
-        </td>
-      </tr>
-        </table>
+        <p style="margin-top: 0;">
+            This is the report of your most recent drone pipeline build.
+            It finished {{ datetime build.finished "Mon Jan 2 15:04:05 MST 2006" "Local" }}.
+        </p>
+
+        <p>
+            {{#success build.status}}
+             <div class="alert alert-good">
+               <span>Successful build #{{ build.number }}</span>
+             </div>
+           {{else}}
+             <div class="alert alert-bad">
+               <span>Failed build #{{ build.number }}</span>
+             </div>
+           {{/success}}
+        </p>
+
+        <p>
+        <div class="bg-secondary card">
+            <div class="card-header">
+                The build was based on the following commit:
+            </div>
+            <div class="card-body">
+                <table class="w-full" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td><strong><a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a></strong></td>
+                            <td style="text-align: right;"><small class="badge">{{commit.branch}}</small></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table class="w-full" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td style="width: 35px"><img class="m-2" src="{{commit.author.avatar}}" style="border-radius: 50%;"
+                                    width="40px" height="40px" alt="Avatar of {{commit.author.name}}"></td>
+                            <td>
+                                <div>
+                                    <strong>{{commit.author.name}}</strong><br>
+                                    {{commit.author.email}}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </p>
+
+        <div class="bg-secondary card">
+            <div class="card-header">
+                Here are some useful links:
+            </div>
+            <div class="card-body">
+                <table class="w-full" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>
+                            See the build on drone:
+                        </td>
+                        <td>
+                            <a href="{{build.link}}">Build #{{build.number}}, {{build.status}}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Link to the commit:
+                        </td>
+                        <td>
+                            <a href="{{commit.link}}">{{ truncate commit.sha 8 }}: {{commit.message}}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Link to the repository:
+                        </td>
+                        <td>
+                            <a href="{{repo.link}}">{{repo.fullName}}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Started at:
+                        </td>
+                        <td>
+                            {{ datetime build.created "Mon Jan 2 15:04:05 MST 2006" "Local" }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
 </body>
+
 </html>
 `
