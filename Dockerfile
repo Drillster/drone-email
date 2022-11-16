@@ -1,9 +1,9 @@
 FROM golang:1.14-alpine as builder
 
-WORKDIR /go/src/drone-email
-COPY . .
+WORKDIR /work
 
-RUN GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build
+ADD . .
+RUN CGO_ENABLED=0 go build
 
 FROM alpine:3.14
 
