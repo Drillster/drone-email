@@ -26,7 +26,7 @@ Build the docker for ARM with buildx
 ```
 docker buildx create --name mybuilder
 docker buildx use mybuilder
-docker buildx build --file Dockerfile.armhf --platform linux/arm64/v7,linux/arm64 -t drone-email:latest .
+docker buildx build --file Dockerfile --platform linux/amd64,linux/arm64/v7,linux/arm64 -t drone-email:latest .
 ```
 
 This will create a Docker image called `drillster/drone-email:latest`.
