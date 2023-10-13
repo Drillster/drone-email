@@ -220,7 +220,21 @@ func (p Plugin) Exec() error {
 		if len(recipient) == 0 {
 			continue
 		}
-		message.SetAddressHeader("From", p.Config.FromAddress, p.Config.FromName)
+
+		from_address := p.Config.FromAddress
+		from_name := p.Config.FromName
+		if from_address == "" {
+			from_address = p.Commit.Author.Email
+			if from_address == "" {
+				from_address = recipient
+			}
+
+			if from_name == "" { // only if from_address is blank as well
+				from_name = p.Commit.Author.Name
+			}
+		}
+
+		message.SetAddressHeader("From", from_address, from_name)
 		message.SetAddressHeader("To", recipient, "")
 		message.SetHeader("Subject", subject)
 		message.AddAlternative("text/plain", plainBody)
