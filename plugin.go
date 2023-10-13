@@ -81,6 +81,7 @@ type (
 	}
 
 	Config struct {
+		Verbose        bool
 		FromAddress    string
 		FromName       string
 		Host           string
@@ -141,6 +142,10 @@ func (p Plugin) Exec() error {
 		} else {
 			log.Errorf("Could not open RecipientsFile %s: %v", p.Config.RecipientsFile, err)
 		}
+	}
+
+	if p.Config.Verbose {
+		log.Infof ("Host [%s], Port [%d], Username [%s] Password[%s]", p.Config.Host, p.Config.Port, p.Config.Username, p.Config.Password)
 	}
 
 	if p.Config.Username == "" && p.Config.Password == "" {
@@ -232,6 +237,10 @@ func (p Plugin) Exec() error {
 			if from_name == "" { // only if from_address is blank as well
 				from_name = p.Commit.Author.Name
 			}
+		}
+
+		if p.Config.Verbose {
+			log.Infof ("Recipient [%s] From [%s <%s>]", recipient, from_name, from_address)
 		}
 
 		message.SetAddressHeader("From", from_address, from_name)
