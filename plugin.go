@@ -145,7 +145,7 @@ func (p Plugin) Exec() error {
 	}
 
 	if p.Config.Verbose {
-		log.Infof ("Host [%s], Port [%d], Username [%s] Password[%s]", p.Config.Host, p.Config.Port, p.Config.Username, p.Config.Password)
+		log.Infof ("Host [%s], Port [%d], Username [%s]", p.Config.Host, p.Config.Port, p.Config.Username);
 	}
 
 	if p.Config.Username == "" && p.Config.Password == "" {
