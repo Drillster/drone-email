@@ -25,6 +25,11 @@ func main() {
 	app.Version = "2.0.2"
 	app.Flags = []cli.Flag{
 		// Plugin environment
+		cli.BoolFlag{
+			Name:   "verbose",
+			Usage:  "set verbosity",
+			EnvVar: "PLUGIN_VERBOSE",
+		},
 		cli.StringFlag{
 			Name:   "from",
 			Usage:  "from address",
@@ -405,6 +410,7 @@ func run(c *cli.Context) error {
 		PullRequest: c.Int("pullRequest"),
 		DeployTo:    c.String("deployTo"),
 		Config: Config{
+			Verbose:        c.Bool("verbose"),
 			FromAddress:    fromAddress,
 			FromName:       c.String("from.name"),
 			Host:           c.String("host"),
